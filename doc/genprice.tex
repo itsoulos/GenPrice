@@ -1,0 +1,1112 @@
+%% LyX 1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[]{fontenc}
+\setcounter{secnumdepth}{4}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\providecommand{\LyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+%% Bold symbol macro for standard LaTeX users
+\newcommand{\boldsymbol}[1]{\mbox{\boldmath $#1$}}
+
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ \newenvironment{lyxcode}
+   {\begin{list}{}{
+     \setlength{\rightmargin}{\leftmargin}
+     \setlength{\listparindent}{0pt}% needed for AMS classes
+     \raggedright
+     \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{0pt}
+     \normalfont\ttfamily}%
+    \item[]}
+   {\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\renewcommand{\baselinestretch}{2}
+
+\makeatother
+\begin{document}
+
+
+\title{Genetically Controlled Random Search}
+
+
+\author{Ioannis G. Tsoulos, Isaac E. Lagaris%
+\footnote{Corresponding author. Email: lagaris@cs.uoi.gr%
+}}
+
+
+\date{Department of Computer Science, University of Ioannina, \\
+P.O. Box 1186, Ioannina 45110 - GREECE}
+
+\maketitle
+\begin{abstract}
+A new stochastic method for locating the global minimum of a multidimensional
+function inside a rectangular hyperbox is presented. A sampling technique
+is employed that makes use of the procedure known as grammatical evolution.
+This method can be considered as a {}``genetic'' modification to
+the controlled random search procedure due to Price. We offer a comparison
+of the new method with others of similar structure, by presenting
+results of computational experiments on a set of test functions.
+\end{abstract}
+\textbf{PACS}::02.60.-x ; 02.60.Pn ; 07.05.Kf;  02.70.Lq; 07.05.Mh 
+
+
+\section*{PROGRAM SUMMARY }
+
+\textit{Title of program}: GenPrice
+
+\begin{flushleft}\textit{Catalogue identifier}:\end{flushleft}
+
+\begin{flushleft}\textit{Program available from}: CPC Program Library,
+Queen's University of Belfast, N. Ireland.\end{flushleft}
+
+\begin{flushleft}\textit{Computer for which the program is designed
+and others on which it has been tested}: The tool is designed to be
+portable in all systems running the GNU C++ compiler. \end{flushleft}
+
+\begin{flushleft}\emph{Installation}: University of Ioannina, Greece.\end{flushleft}
+
+\begin{flushleft}\textit{Programming language used}: GNU-C++, GNU-C,
+GNU Fortran - 77.\end{flushleft}
+
+\begin{flushleft}\emph{Memory required to execute with typical data}:
+200KB.\end{flushleft}
+
+\begin{flushleft}\textit{No. of bits in a word}: 32\end{flushleft}
+
+\begin{flushleft}\emph{No. of processors used}: 1\end{flushleft}
+
+\begin{flushleft}\emph{Has the code been vectorised or parallelized?}:
+No.\end{flushleft}
+
+\begin{flushleft}\emph{No. of bytes in distributed program,including
+test data etc}.: 100 Kbytes.\end{flushleft}
+
+\begin{flushleft}\emph{Distribution format}: gzipped tar file.\end{flushleft}
+
+\begin{flushleft}\emph{Keywords}: Global optimization, stochastic
+methods, genetic programming, grammatical evolution.\end{flushleft}
+
+\begin{flushleft}\emph{Nature of physical problem}: A multitude of
+problems in science and engineering are often reduced to minimizing
+a function of many variables. There are instances that a local optimum
+does not correspond to the desired physical solution and hence the
+search for a better solution is required. Local optimization techniques
+are frequently trapped in local minima. Global optimization is hence
+the appropriate tool. For example, solving a non - linear system of
+equations via optimization, one may encounter many local minima that
+do not correspond to solutions. ( i.e. they are far from zero)\end{flushleft}
+
+\begin{flushleft}\emph{Typical running time}: Depending on the objective
+function.\end{flushleft}
+
+
+\section*{LONG WRITE UP}
+
+
+\section{Introduction}
+
+A recurring problem in many applications is that of finding the global
+minimum of a function. This problem may be stated as: Determine \[
+x^{*}=\mbox{arg}\min_{x\in S}f(x)\]
+The non empty set $S\subset R^{n}$ considered here, is a hyper box
+defined as: \[
+S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]\]
+
+
+Recently several methods have been proposed for the solution of the
+global optimization problem. These methods can be divided in two main
+categories, deterministic and stochastic. Deterministic methods guarantee
+the convergence to the global minimum, but they can be applied only
+under certain conditions and usually require apriori information about
+the objective function \cite{key-151}. On the other hand, random
+search methods are widely used in the field of global optimization,
+because they are easy to implement and do not need apriori information
+about the objective function. Various random search methods have been
+proposed, such as the Random Line Search \cite{key-1}, Adaptive Random
+Search \cite{key-3,key-106,key-107}, Competitive Evolution \cite{key-109},
+Controlled Random Search \cite{key-112,key-110,key-113,key-114,key-115},
+Simulated Annealing \cite{key-116,key-117,key-118,key-119,key-120,key-121,key-122},
+Genetic Algorithms \cite{key-123,key-124,key-125}, Differential Evolution
+\cite{key-126,key-127}, methods based on Tabu Search \cite{key-146}
+etc. The main disadvantage of random search methods is that they tend
+to perform an excessive number of function evaluations in order to
+locate the global minimum. This article introduces a new sampling
+technique for use with conjunction with Controlled Random Search.
+The method is based on the genetic programming procedure known as
+Grammatical Evolution. The suggested approach uses a population of
+randomly created moves, which guide the underlying stochastic search
+to the global minimum. These random moves are produced by applying
+the method of grammatical evolution. Grammatical evolution is an evolutionary
+process that can produce code in an arbitrary language. The production
+is performed using a mapping process governed by a grammar expressed
+in Backus Naur Form. Grammatical evolution has been applied successfully
+to problems such as symbolic regression \cite{key-130}, discovery
+of trigonometric identities \cite{key-131}, robot control \cite{key-132},
+caching algorithms \cite{key-133}, financial prediction \cite{key-134}
+etc. The rest of this article is organized as follows: in section
+\ref{sec:Description} we give a brief presentation of the grammatical
+evolution and of the suggested algorithms. In section \ref{sec:Experimental-results}
+we list some experimental results from the application of the proposed
+method and a comparison is made against traditional global optimization
+methods and in section \ref{sec:Software-documentation} we present
+the installation and the execution procedures of the proposed package.
+
+
+\section{Description of the algorithm \label{sec:Description}}
+
+
+\subsection{Grammatical evolution }
+
+Grammatical evolution is an evolutionary algorithm that can produce
+code in any programming language. The algorithm requires the grammar
+of the target language in BNF syntax and the proper fitness function.
+Chromosomes in grammatical evolution, in contrast to classical genetic
+programming \cite{key-129}, are not expressed as parse trees, but
+as vectors of integers. Each integer denotes a production rule from
+the BNF grammar. The algorithm starts from the start symbol of the
+grammar and gradually creates the program string, by replacing non
+terminal symbols with the right hand of the selected production rule.
+The selection is performed in two steps:
+
+\begin{itemize}
+\item Read an element from the chromosome (with value $V$).
+\item Select the rule according to the scheme\begin{equation}
+\mbox{Rule}=V\ \ \mbox{mod}\ \mbox{NR}\label{eq:eq2000}\end{equation}
+
+\end{itemize}
+where NR is the number of rules for the specific non-terminal symbol.
+The process of replacing non terminal symbols with the right hand
+of production rules is continued until either a full program has been
+generated or the end of chromosome has been reached. In the latter
+case we can reject the entire chromosome or we can start over (wrapping
+event) from the first element of the chromosome. In our approach we
+allow at most two wrapping events to occur. Further details about
+the grammatical evolution procedure can be found in 
+
+
+\subsection{Proposed grammar }
+
+The proposed grammar is a small portion of the grammar of the C programming
+language. The grammar can be expressed as follows in BNF notation:
+
+\begin{lyxcode}
+S::=<expr>
+
+<expr>:=(<expr><binary\_op><expr>)
+
+~~~~~~~|<func\_op>(<expr>)
+
+~~~~~~~|<terminal>
+
+<binary\_op>::=+|-|{*}|/
+
+<func\_op>::=sin~|~cos~|~exp~|~log
+
+<terminal>::=<digitlist>.<digitlist>
+
+~~~~~~~~~~~~~|x
+
+<digitlist>::=<digit>
+
+~~~~~~~~~~~~~|<digit><digit>
+
+~~~~~~~~~~~~~|<digit><digit><digit>
+
+<digit>::=0|1|2|3|4|5|6|7|8|9
+\end{lyxcode}
+As we can see the employed programming language supports four functions
+and at most three digit numbers. Note that it is straightforward to
+extend the function repertoire and upgrade the support to multiple
+digit numbers.
+
+
+\subsection{Description of the GRS algorithm }
+
+\begin{description}
+\item [INPUT]Data:
+\end{description}
+\begin{itemize}
+\item A point $x=\left(x_{1},x_{2},\ldots,x_{n}\right),\  x\in S\subset R^{n}$.
+\item $\epsilon$, a small positive number.
+\item $k$, a small positive integer, usually between 10 and 20.
+\end{itemize}
+\begin{description}
+\item [INITIALIZATION]step:
+\end{description}
+\begin{itemize}
+\item The initialization of each element of the genetic population is performed
+by selecting a random integer in the range {[}0,255{]}.
+\end{itemize}
+\begin{description}
+\item [LOOP]Step:
+\end{description}
+\begin{itemize}
+\item \textbf{For} $i=1,...,k$ \textbf{Do}
+
+\begin{itemize}
+\item \textbf{Set} $x_{\mbox{old}}=x$.
+\item \textbf{Create} a new generation of chromosomes in the population
+with the use of the genetic operations (crossover, mutation, reproduction).
+The crossover procedure is performed with one - point crossover \cite{key-124}.
+\item \textbf{For} every chromosome \textbf{Do}
+
+\begin{itemize}
+\item \textbf{Split} the chromosome into $n$ parts. Each part corresponds
+to a random movement and each part is denoted by $p_{i},\  i=1,\ldots,n$.
+On every piece $p_{i}$ the grammatical evolution transformation is
+applied, which is based on the proposed grammar. This determines a
+univariate function $f_{i}$. 
+\item \textbf{Set} $d_{i}=f_{i}\left(x_{i}\right),\ \forall\  i=1,...,n$.
+\item \textbf{Denote} by $d$ the vector $\left(d_{1},d_{2},...,d_{n}\right)$.
+\item \textbf{Set} $x_{+}=x+d$.
+\item \textbf{If} $x_{+}\notin S$ or $f\left(x_{+}\right)>y$ \textbf{then}
+
+\begin{itemize}
+\item \textbf{Set} $x_{-}=x-d$.
+\item \textbf{If} $x_{-}\ \notin S$ or $f\left(x_{-}\right)>y$ , \textbf{then}
+\textbf{Set} the fitness value to a very large number.
+\item \textbf{Else} \textbf{Set} the fitness value to $f\left(x_{-}\right)$.
+\end{itemize}
+\item \textbf{Endif}
+\item \textbf{Else}
+
+\begin{itemize}
+\item \textbf{Set} the fitness value to $f\left(x_{+}\right)$.
+\end{itemize}
+\item \textbf{Endif}
+\end{itemize}
+\item \textbf{Endfor}
+\item \textbf{Set} $x_{g}=x+d_{\mbox{best}}$, where $d_{\mbox{best}}$
+the movement that corresponds to the chromosome with the best fitness
+value.
+\item \textbf{Set} $x=x_{g}$.
+\item \textbf{If} $\left|x-x_{\mbox{old}}\right|\le\epsilon$, terminate
+and \textbf{return} $x$ as the located minimizer.
+\end{itemize}
+\item \textbf{Endfor}
+\item \textbf{Return} $x$ as the located minimizer.
+\end{itemize}
+
+\subsection{Genetically Controlled Random Search}
+
+The Controlled Random Search is a population based optimization algorithm
+and it has been applied successfully to many problems \cite{key-139}
+and is the base of our new procedure that is described above:
+
+\begin{description}
+\item [Initialization]Step:
+\end{description}
+\begin{itemize}
+\item \textbf{Se}t the value for the parameter $N$. A commonly used value
+for that is $N=25n$.
+\item \textbf{Set} a small positive value for $\epsilon$.
+\item \textbf{Create} the set $T=\left\{ z_{1},z_{2},...,z_{N}\right\} $,
+by randomly sampling $N$ points from $S$.
+\end{itemize}
+\begin{description}
+\item [Min\_Max]Step:
+\end{description}
+\begin{itemize}
+\item \textbf{Calculate} the points $z_{\mbox{min}}=\mbox{argmin}f(z)$
+and $z_{\mbox{max}}=\mbox{argmax}f(z)$ and their function values
+\[
+f_{\mbox{max}}=\max_{z\in T}f(z)\]
+ and \[
+f_{\mbox{min}}=\min_{z\in T}f(z)\]
+
+\item \textbf{If} $\left|f_{\mbox{max}}-f_{\mbox{min}}\right|<\epsilon$,
+\textbf{then} \textbf{goto} \textbf{Local\_Search} Step.
+\end{itemize}
+\begin{description}
+\item [New\_Point]Step:
+\end{description}
+\begin{itemize}
+\item \textbf{Select} randomly the reduced set $\tilde{T}=\left\{ z_{T_{1}},z_{T_{2}},..,z_{T_{n+1}}\right\} $
+from $T$.
+\item \textbf{Compute} the centroid $G$: \[
+G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}\]
+
+\item \textbf{Compute} a trial point $\tilde{z}=2G-z_{T_{n+1}}$.
+\item \textbf{If} $\tilde{z}\ \notin S$ \textbf{or} $f(\tilde{z})\ge f_{\mbox{max}}$
+\textbf{then} goto New\_Point step.
+\item \textbf{Perform} a call to GRS procedure using as starting point the
+point $\tilde{z}$. This is the step that distinguishes the new method
+from the controlled random search \cite{key-112}.
+\end{itemize}
+\begin{description}
+\item [Update]Step:
+\end{description}
+\begin{itemize}
+\item $T=T\ \cup\{\tilde{z}\}-\left\{ z_{\mbox{max}}\right\} $.
+\item \textbf{Goto Min\_Max} Step.
+\end{itemize}
+\begin{description}
+\item [Local\_Search]Step:
+\end{description}
+\begin{itemize}
+\item $z^{*}=\mbox{localSearch}(z)$.
+\item Return the point $z^{*}$ as the discovered global minimum.
+\end{itemize}
+
+\section{Experimental results\label{sec:Experimental-results}}
+
+The Genetically Controlled Random Search (GCRS) was tested against 
+
+\begin{enumerate}
+\item The original Controlled Random Search (CRS). 
+\item The modified Controlled Random Search (PCRS) as described in \cite{key-150}.
+\end{enumerate}
+We list also results from the Simulated Annealing (SA) as modified
+by Goffe et al \cite{key-122} not for immediate comparison since
+the methods are quite different, but only as a reference point (Their
+code \texttt{simann.f} is available from the URL: http://www.netlib.org).
+
+The comparison is made using a a suite of well known test problems.
+Each method was run 30 times on every problem using different random
+seeds. We have measured the ability of the method to discover the
+global minimum and the number of function evaluations it required.
+In all cases the selection rate was set to 90\% and the mutation rate
+to 5\%. The length of each chromosome was set to $10\times d$, where
+$d$ is the dimensionality of the objective function and the maximum
+number of iterations allowed in the GRS method (parameter $K$) was
+set to 10. We used the suggested (ref. \cite{key-110}) value of $N=25n$,
+for the initial population in the methods CRS, PCRS and GCRS. Similarly
+we employed the parameters suggested in the documentation of the Simulated
+Annealing software, available from the URL http://www.netlib.org,
+namely: $N_{S}=20,\  N_{T}=5,\  T=5.0,\  a=0.5,\ \mbox{TLAST}=4$
+for SA. All the experiments were conducted on an AMD ATHLON 2400+
+equipped with 256 MB Ram. The hosting operating system was Debian
+Linux and the used programming language was the GNU C++. The trial
+steps produced by the grammatical evolution were evaluated using the
+FunctionParser programming library \cite{key-128}. 
+
+
+\subsection{Test functions}
+
+
+\subsubsection*{Camel}
+
+$f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4}$,
+$x\in[-5,5]^{2}$ with 6 local minima and global minimum $f^{*}=-1.031628453$.
+
+
+\subsubsection*{Rastrigin}
+
+$f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2})$, $x\in[-1,1]^{2}$
+with 49 local minima and global minimum $f^{*}=-2.0$.
+
+
+\subsubsection*{Griewank2}
+
+$f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}}$,
+$x\in[-100,100]^{2}$ with 529 loca minima and global minimum $f^{*}=0.0$
+
+
+\subsubsection*{Gkls}
+
+$f(x)=\mbox{Gkls}(x,n,w)$, is a function with $w$ local minima,
+described in \cite{key-149}, $x\in[-1,1]^{n},\  n\in[2,100]$. In
+our experiments we use $n=2,3$ and $w=50$.
+
+
+\subsubsection*{GoldStein \& Price }
+
+\begin{eqnarray*}
+f(x) & = & [1+(x_{1}+x_{2}+1)^{2}\\
+ &  & (19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2})]\times\\
+ &  & [30+(2x_{1}-3x_{2})^{2}\\
+ &  & (18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2})]\end{eqnarray*}
+
+
+The function has 4 local minima in the range $[-2,2]^{2}$ and global
+minimum $f^{*}=3.0$.
+
+
+\subsubsection*{Test2N }
+
+\[
+f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i}\]
+with $x\in[-5,5]^{n}$. The function has $2^{n}$ local minima in
+the specified range. In our experiments we used the cases of $n=4,5,6,7$.
+
+
+\subsubsection*{Test30N}
+
+\[
+f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)\]
+with $x\in[-10,10]^{n}$. The function has $30^{n}$ local minima
+in the specified range. In our experiments we used the cases of $n=3,4$.
+
+
+\subsubsection*{Potential}
+
+The molecular conformation corresponding to the global minimum of
+the energy of $N$ atoms interacting via the Lennard-Jones potential
+is determined for two cases: with $N=3$ atoms and with $N=5$ atoms.
+We refer to the first case as \textbf{Potential(3)} (a problem with
+9 variables) and to the second as \textbf{Potential(5)} (a problem
+with 15 variables). The global minimum for the first cases is $f^{*}=3$
+and $f^{*}=-9.103852416$
+
+
+\subsubsection*{Neural}
+
+A neural network (sigmoidal perceptron) with 10 hidden nodes (30 variables)
+was used for the approximation of the function $g(x)=x\sin(x^{2}),\  x\in[-2,2]$.
+The global minimum of the training error  is $f^{*}=0.0$
+
+
+\subsection{Results}
+
+In table \ref{cap:Experimental-results} we list the results for the
+Simulated Annealing in the column labeled SA, the Controlled Random
+Search in the column labeled CRS, the modified Controlled Random Search
+in the column denoted by PCRS and the results from the proposed Genetically
+Controlled Random Search in the column denoted by GCRS. The numbers
+in the cells represent the average number of function evaluations
+required by each method. The number in parentheses denotes the ratio
+of runs that located the global minimum and were not trapped in some
+local minimum. Absence of this number denotes a success rate of 100\%.
+The proposed GCRS has shown superior performance among is peers. This
+can deduced from the significant lower number of the required function
+evaluations, and the percentage of runs that finding the global minimum.%
+\begin{table}
+
+\caption{Experimental results\label{cap:Experimental-results}}
+
+\begin{center}\begin{tabular}{|c|c|c|c|c|}
+\hline 
+FUNCTION&
+SA&
+CRS&
+PCRS&
+GCRS\tabularnewline
+\hline
+\hline 
+CAMEL&
+4820&
+1852&
+1409&
+1504\tabularnewline
+\hline 
+RASTRIGIN&
+4843&
+1903&
+1982&
+428\tabularnewline
+\hline 
+GRIEWANK2&
+4832(0.27)&
+2105&
+2004&
+977\tabularnewline
+\hline 
+GKLS(2,50)&
+4820&
+1627&
+1495&
+1220\tabularnewline
+\hline 
+GKLS(3,50)&
+7228&
+3349&
+3059&
+2056\tabularnewline
+\hline 
+GOLDSTEIN&
+4842&
+1923&
+1456&
+961\tabularnewline
+\hline 
+TEST2N(4)&
+9631&
+6835(0.97)&
+4831&
+4280(0.97)\tabularnewline
+\hline 
+TEST2N(5)&
+12034(0.87)&
+25270(0.97)&
+12342&
+7958\tabularnewline
+\hline 
+TEST2N(6)&
+14438(0.66)&
+32801(0.70)&
+8840(0.87)&
+9914\tabularnewline
+\hline 
+TEST2N(7)&
+16840(0.37)&
+38057(0.40)&
+11751(0.63)&
+9740\tabularnewline
+\hline 
+TEST30N(3)&
+7930(0.23)&
+3703&
+2124&
+1519\tabularnewline
+\hline 
+TEST30N(4)&
+9858(0.23)&
+5135&
+4058&
+1416\tabularnewline
+\hline 
+POTENTIAL(3)&
+21404&
+198046&
+34985&
+9265\tabularnewline
+\hline 
+POTENTIAL(5)&
+36212&
+188646&
+39305&
+9096\tabularnewline
+\hline 
+NEURAL&
+76667(0.93)&
+122617&
+94016&
+14559\tabularnewline
+\hline
+\end{tabular}\end{center}
+\end{table}
+
+
+
+\section{Software documentation\label{sec:Software-documentation}}
+
+
+\subsection{Distribution }
+
+The package is distributed in a tar.gz file named \texttt{GenPrice.tar.gz}
+and under UNIX systems the user must issue the following commands
+to extract the associated files:
+
+\begin{enumerate}
+\item gunzip \texttt{GenPrice.tar.gz}
+\item tar xfv \texttt{GenPrice.tar}
+\end{enumerate}
+These steps create a directory named \texttt{GenPrice} with the following
+contents:
+
+\begin{enumerate}
+\item \textbf{bin}: A directory which is initially empty. After compilation
+of the package, it will contain the executable \textbf{make\_genprice }
+\item \textbf{doc}: This directory contains the documentation of the package
+(this file) in different formats: A \LyX{} file, A \LaTeX{} file and
+a PostScript file.
+\item \textbf{examples}: A directory that contains the test functions used
+in this article, written in ANSI C++ and the Fortran77 version of
+the Six Hump Camel function.
+\item \textbf{include}: A directory which contains the header files for
+all the classes of the package.
+\item \textbf{src}: A directory containing the source files of the package.
+\item \textbf{Makefile}: The input file to the \texttt{make} utility in
+order to build the tool. Usually, the user does not need to change
+this file.
+\item \textbf{Makefile.inc}: The file that contains some configuration parameters,
+such as the name of the C++ compiler etc. The user must edit and change
+this file before installation.
+\end{enumerate}
+
+\subsection{Installation }
+
+The following steps are required in order to build the tool:
+
+\begin{enumerate}
+\item Uncompress the tool as described in the previous section.
+\item \texttt{cd GenPrice }
+\item Edit the file \texttt{Makefile.inc} and change (if needed) the five
+configuration parameters.
+\item Type \texttt{make}.
+\end{enumerate}
+The five parameters in \texttt{Makefile.inc} are the following:
+
+\begin{enumerate}
+\item \textbf{CXX}: It is the most important parameter. It specifies the
+name of the C++ compiler. In most systems running the GNU C++ compiler
+this parameter must be set to g++.
+\item \textbf{CC}: If the user written programs are in C, set this parameter
+to the name of the C compiler. Usually, for the GNU compiler suite,
+this parameter is set to gcc.
+\item \textbf{F77}: If the user written programs are in Fortran 77, set
+this parameter to the name of the Fortran 77 compiler. For the GNU
+compiler suite a usual value for this parameter is g77.
+\item \textbf{F77FLAGS}: The compiler GNU FORTRAN 77 (g77) appends an underscore
+to the name of all subroutines and functions after the compilation
+of a Fortran source file. In order to prevent this from happening
+we can pass some flags to the compiler. Normally, this parameter must
+be set to -fno-underscoring. 
+\item \textbf{ROOTDIR}: Is the location of the GenPrice directory. It is
+critical for the system that this parameter is set correctly. In most
+systems, it is the only parameter which must be changed.
+\end{enumerate}
+
+\subsection{User written subprograms }
+
+In figure \ref{cap:Formulation-in-C} we see the template of the objective
+function in the C programming language. The same scheme is used also
+in C++, but the code has the line 
+
+\begin{lyxcode}
+extern~{}``C''~\{
+\end{lyxcode}
+before the functions and the line 
+
+\begin{lyxcode}
+\}
+\end{lyxcode}
+after them, in order to prevent the compiler from generating symbols
+that will not cause problem to the linking process. The template for
+Fortran 77 is given in figure \ref{cap:Formulation-in-Fortran}. The
+symbol d denotes the dimension of the objective function. The meaning
+of the functions are the following:
+
+\begin{enumerate}
+\item \textbf{getdimension}(): It returns the dimension of the objective
+function.
+\item \textbf{getleftmargin}(left): It fills the double precision array
+left with the left margins of the objective function. 
+\item \textbf{getrightmargin}(right): It fills the double precision array
+right with the right margins of the objective function.
+\item \textbf{funmin}(x): It returns the value of the objective function
+evaluated at point x.
+\item \textbf{granal}(x,g): It returns in a double precision array g the
+gradient of the objective function at point x.
+\end{enumerate}
+
+\subsection{The utility make\_genprice }
+
+After the compilation of the package, the executable \texttt{make\_genprice}
+will be placed in the subdirectory \texttt{bin} in the distribution
+directory. This program creates the final executable and it takes
+the following command line parameters:
+
+\begin{enumerate}
+\item \texttt{-h}: Prints a help screen and terminates.
+\item \texttt{-p} \textbf{filename}: The \textbf{filename} parameter specifies
+the name of the file containing the objective function. The utility
+checks the suffix of the file and it uses the appropriate compiler.
+If this suffix is .cc or .c++ or .CC or .cpp, then it invokes the
+C++ compiler. If the suffix is .f or .F or .for then it invokes the
+Fortran 77 compiler. Finally, if the suffix is .c it invokes the C
+compiler.
+\item \texttt{-o} filename: The \textbf{filename} parameter specifies the
+name of the final executable. The default value for this parameter
+is GenPrice.
+\end{enumerate}
+
+\subsection{The utility GenPrice }
+
+The final executable \texttt{GenPrice} has the following command line
+parameters:
+
+\begin{enumerate}
+\item \texttt{-h}:The program prints a help and it terminates.
+\item \texttt{-c} \texttt{count}: The integer parameter \texttt{count} specifies
+the number of chromosomes for the Genetic Random Search procedure.
+The default value for this parameter is 20.
+\item \texttt{-s} \texttt{srate}: The double parameter \texttt{srate} specifies
+the selection rate used in the Genetic Random Search procedure. The
+default value for this parameter is 0.10 (10\%).
+\item \texttt{-m} \texttt{mrate}: The double parameter \texttt{mrate} specifies
+the mutation rate used in the Genetic Random Search procedure. The
+default value for this parameter is 0.05 (5\%).
+\item \texttt{-r} \texttt{seed}: The integer parameter \texttt{seed} specifies
+the seed for the random number generator. It can assume any integer
+value.
+\item \texttt{-o filename}: The parameter \texttt{filename} specifies the
+file where the output from the \texttt{GenPrice} will be placed. The
+default value for this parameter is the standard output.
+\end{enumerate}
+
+\subsection{A working example}
+
+Consider the Six Hump Camel function given by\[
+f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\  x\in[-5,5]^{2}\]
+ with 6 local minima. The implementation of this function in C++ and
+in Fortran77 is shown in figures \ref{cap:Codification-of-Camel}
+and \ref{cap:ImplementationFortran}. Let the file with the C++ code
+be named \texttt{camel.cc} and that with the Fortran code \texttt{camel.f.}
+Let these files be located in the \texttt{examples} subdirectory.
+Change to the \texttt{examples} subdirectory and create the \texttt{GenPrice}
+executable with the \texttt{make\_genprice} command:
+
+\begin{lyxcode}
+../bin/make\_genprice~-p~camel.cc
+\end{lyxcode}
+or for the Fortran 77 version
+
+\begin{lyxcode}
+../bin/make\_genprice~-p~~camel.f
+\end{lyxcode}
+The \texttt{make\_genprice} responds:
+
+\begin{lyxcode}
+RUN~./GenPrice~IN~ORDER~TO~RUN~THE~PROBLEM~
+\end{lyxcode}
+Run \texttt{GenPrice}  by issuing the command:
+
+\begin{lyxcode}
+./GenPrice~~-c~10~-r~1
+\end{lyxcode}
+The resulting output appears as:
+
+\begin{lyxcode}
+FUNCTION~EVALUATIONS~=~1310~
+
+GRADIENT~EVALUATIONS~=~20~
+
+MINIMUM~=~~0.089842~~-0.712656~~-1.031628~
+\end{lyxcode}
+\begin{thebibliography}{10}
+\bibitem{key-151}T$\ddot{\mbox{o}}$rn A. and $\check{\mbox{Z}}$ilinskas A., Global
+Optimization Volume 350 of Lecture Notes in Computer Science, Springer,
+Heidelberg, 1987.
+\bibitem{key-1}Bremermann H. A., A method for unconstrained global optimization,
+Mathematical Biosciences 9, 1-15 (4,8) 1970.
+\bibitem{key-3}McMurty C. J and Fu K.S., A variable structure automation used as
+a multimodal searching technique, IEEE Trans. On Automatic Control
+11, 379-387 (4), 1966.
+\bibitem{key-106}Schumer M.A. and Steglitz K., Adaptive stepsize random search, IEEE
+Trans. on Automatic Control 13, 270-276(4), 1969.
+\bibitem{key-107}Beltrami E.J. and Indusi J.P., An adaptive random search algorithm
+for constrained optimization, IEEE Trans. on Automatic Control 17,
+1004-1007(4), 1972.
+\bibitem{key-109}Jarvis R.A., Adaptive global search by the process of competitive
+evolution, IEEE Trans. on Syst., Man and Cybergenetics 75, 297-311(4),
+1975.
+\bibitem{key-112}Price W. L., Global Optimization by Controlled Random Search, Computer
+Journal, Vol. 20, pp. 367-370, 1977.
+\bibitem{key-110}Price W. L., A Controlled Random Search Procedure for Global Optimization,
+in {}``Towards Global Optimization 2'', Edited by L. C. W. Dixon
+and C. P. Szeg$\ddot{\mbox{o}}$, North-Holland, Amsterdam, Holland,
+pp 71-84, 1978.
+\bibitem{key-113}Price W. L., Global Optimization by Controlled Random Search, Journal
+of Optimization, Theory and Applications, Vol. 40, pp. 333-348, 1983.
+\bibitem{key-114}Ali M. M. and Storey C., Modified Controlled Random Search Algorithms,
+Internation Journal of Computer Mathematics, Vol. 54, pp. 229-235,
+1995.
+\bibitem{key-115}Mohan C. and Shanker K., A Controlled Random Search Technique for
+Global Optimization using Quadratic Approximation, Asia-Pacific Journal
+of Operational Research, Vol. 11, pp. 93-101, 1994.
+\bibitem{key-116}Cerny C., A Thermodynamical approach to the traveling salesman problem:
+an efficient simulation algorithm, Technical Report, Institute of
+Physics and Biophysics, Comenius University, Bratislava, 1982.
+\bibitem{key-117}Kirkpatrick S., Gelatt C. D. and Vecchi M. P., Optimization by simulated
+annealing, Science 220, 671-680 (4), 1983.
+\bibitem{key-118}P. J. M. van Laarhoven and E. H. L. Aarts, {}``Simulated Annealing:
+Theory and Applications'', 1987, D. Riedel, Boston.
+\bibitem{key-119}Aarts E. and Korst J., {}``Simulated Annealing and Boltzman Machines'',
+1989, John Wiley and Sons.
+\bibitem{key-120}Ingber L., {}``Simulated Annealing: Practice versus Theory'', J.
+Math. Comput. Modeling 18(1993), pp. 29-57.
+\bibitem{key-121}Corana A., Marchesi M., Martini C. and Ridella S., Minimizing Multimodal
+Functions of Continuous Variables with the {}``Simulated Annealing''
+Algorithm, ACM Transactions on Mathematical Software, Vol. 13, pp.
+262-280, 1987.
+\bibitem{key-122}Goffe W. L., Ferrier G. D. and Rogers J., {}``Global Optimization
+of Statistical Functions with Simulated Annealing'', J. Econometrics
+60(1994), pp. 65-100.
+\bibitem{key-123}Goldberg D., Genetic Algorithms in Search, Optimization and Machine
+Learning, Addison-Wesley Publishing Company, Reading, Massachussets,
+1989.
+\bibitem{key-124}Michaelewizc Z., Genetic Algorithms + Data Structures = Evolution
+Programs, Springer - Verlag, 1996.
+\bibitem{key-125}Yang R. and Douglas I., Simple Genetic Algorithm with Local Tuning:
+Efficient Global Optimization Technique, Journal of Optimization Theory
+and Applications, Vol. 98, No. 2, pp. 449-465, 1998.
+\bibitem{key-126}Storn R. and Price K., Differential Evolution - A Simple and Efficient
+Heuristic for Global Optimization over Continuous Spaces, Journal
+of Global Optimization, Vol. 11, pp. 341-359, 1997.
+\bibitem{key-127}Ali M. M. and T$\ddot{\mbox{o}}$rn A., Optimization of Carbon and
+Silicon Cluster Geometry for Tersoff Potential using Differential
+Evolution, in 'Optimization in Computational Chemistry and Molecular
+Biology', Edited by C. A. Floudas and P. M. Pardalos, Kluwer Acedemic
+Publisher, pp. 287-300, 2000.
+\bibitem{key-130}M. O'Neill and C. Ryan, Grammatical Evolution: Evolutionary Automatic
+Programming in a Arbitrary Language, volume 4 of Genetic programming.
+Kluwer Academic Publishers, 2003. 
+\bibitem{key-131}C. Ryan, M. O'Neill, and J.J. Collins, {}``Grammatical Evolution:
+Solving Trigonometric Identities,'' In proceedings of Mendel 1998:
+4th International Mendel Conference on Genetic Algorithms, Optimization
+Problems, Fuzzy Logic, Neural Networks, Rough Sets., Brno, Czech Republic,
+June 24-26 1998. Technical University of Brno, Faculty of Mechanical
+Engineering, pp. 111-119.
+\bibitem{key-132}Collins J. and Ryan C., {}``Automatic Generation of Robot Behaviors
+using Grammatical Evolution,'' In Proc. of AROB 2000, the Fifth International
+Symposium on Artificial Life and Robotics.
+\bibitem{key-133}M. O'Neill and C. Ryan, {}``Automatic generation of caching algorithms,''
+In Kaisa Miettinen, Marko M. Mkel, Pekka Neittaanmki, and Jacques
+Periaux (eds.), Evolutionary Algorithms in Engineering and Computer
+Science, Jyvskyl, Finland, 30 May - 3 June 1999, John Wiley \& Sons,
+pp. 127-134, 1999.
+\bibitem{key-134}A. Brabazon and M. O'Neill, {}``A grammar model for foreign-exchange
+trading,'' In H. R. Arabnia et al., editor, Proceedings of the International
+conference on Artificial Intelligence, volume II, CSREA Press, 23-26
+June 2003, pp. 492-498, 2003.
+\bibitem{key-135}M. O'Neill and C. Ryan, {}``Genetic code degeneracy: Implications
+for grammatical evolution and beyond,'' In D. Floreano, J.-D. Nicoud,
+and F. Mondada (eds.), Advances in Artificial Life, volume 1674 of
+LNAI, Lausanne, 13-17 September 1999, Springer Verlag, page 149, 1999.
+\bibitem{key-136}M. O'Neill and C. Ryan, {}``Under the hood of grammatical evolution,''
+In Wolfgang Banzhaf, Jason Daida, Agoston E. Eiben, Max H. Garzon
+Vasant Honavar, Mark Jakiela, and Robert E. Smith (eds.), Proceedings
+of the Genetic and Evolutionary Computation Conference, vol. 2, Orlando,
+Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp. 1143-1148, 1999.
+\bibitem{key-137}M. O'Neill and C. Ryan, {}``Evolving Multi-Line Compilable C Programs,''
+In Riccardo Poli, Peter Nordin, William B. Langdon, and Terence C.
+Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
+Sweden, 26-27 May 1999. Springer-Verlag, pp. 83-92, 1999.
+\bibitem{key-138}M. O'Neill and C. Ryan, {}``Grammatical Evolution,'' IEEE Trans.
+Evolutionary Computation, Vol. 5, pp. 349-358, 2001.
+\bibitem{key-129}J. R. Koza, Genetic Programming: On the programming of Computer by
+Means of Natural Selection. MIT Press: Cambridge, MA, 1992.
+\bibitem{key-128}Nieminen J. and Yliluoma J., ``Function Parser for C++, v2.7'', available
+from http://www.students.tut.fi/$\tilde{}$warp/FunctionParser/.
+\bibitem{key-139}Ali M. M., Storey C. and T$\ddot{\mbox{o}}$rn A., Application of
+some stochastic global optimization algorithms to practical problems,
+Journal of Optimization Theory and Applications, Vol. 95, No. 3, pp.
+545-563, 1997.
+\bibitem{key-146}Cvijoivic D. and Klinowski J., Taboo search. An Approach to the Multiple
+Minima Problems, Science 667, pp. 664-666, 1995.
+\bibitem{key-149}Gaviano M., Ksasov D. E., Lera D. and Sergeyev, Y. D. Software for
+generation of classes of test functions with known local and global
+minima for global optimization, ACM Trans. Math. Softw. \textbf{29},
+pp. 469-480, 2003.
+\bibitem{key-150}Theos F.V, Lagaris I.E. and Papageorgiou D.G., PANMIN: sequential
+and parallel global optimization procedures with a variety of options
+for the local search strategy Computer Physics Communications Package,
+159 (2004) pp. 63-69
+\end{thebibliography}
+%
+\begin{figure}[h]
+
+\caption{Formulation in C\label{cap:Formulation-in-C}}
+
+\textbf{int} getdimension()
+
+\{
+
+\}\\
+
+
+\textbf{void} getleftmargin(\textbf{double} {*}left)
+
+\{
+
+\}\\
+
+
+\textbf{void} getrightmargin(\textbf{double} {*}right)
+
+\{
+
+\}\\
+
+
+\textbf{double} funmin(\textbf{double} {*}x)
+
+\{
+
+\}\\
+
+
+\textbf{void} granal(\textbf{double} {*}x,\textbf{double} {*}g)
+
+\{
+
+\}
+\end{figure}
+%
+\begin{figure}[h]
+
+\caption{Formulation in Fortran 77\label{cap:Formulation-in-Fortran}}
+
+\textbf{integer function} getdimension()
+
+getdimension = d
+
+\textbf{end}\\
+
+
+\textbf{subroutine} getleftmargin(left)
+
+\textbf{double precision} left(d)
+
+\textbf{end}\\
+
+
+\textbf{subroutine} getrightmargin(right)
+
+\textbf{double precision} right(d)
+
+\textbf{end}\\
+
+
+\textbf{double precision function} funmin(x)
+
+\textbf{double precision} x(d)
+
+\textbf{end}\\
+
+
+\textbf{subroutine} granal(x,g)
+
+\textbf{double precision} x(d)
+
+\textbf{double precision} g(d)
+
+\textbf{end}
+\end{figure}
+%
+\begin{figure}[h]
+
+\caption{Implementation of Camel function in C++.\label{cap:Codification-of-Camel}}
+
+\textbf{\footnotesize extern} {\footnotesize {}``C''\{}{\footnotesize \par}
+
+\textbf{\footnotesize $\;$int} {\footnotesize getdimension()}{\footnotesize \par}
+
+{\footnotesize $\:$\{}{\footnotesize \par}
+
+{\footnotesize $\quad$}\textbf{\footnotesize return} {\footnotesize 2;}{\footnotesize \par}
+
+{\footnotesize $\:$\}}\\
+{\footnotesize \par}
+
+\textbf{\footnotesize $\:$void} {\footnotesize getleftmargin(}\textbf{\footnotesize double}
+{\footnotesize {*}left)}{\footnotesize \par}
+
+{\footnotesize $\:$\{}{\footnotesize \par}
+
+{\footnotesize $\quad$left{[}0{]}=-5.0;}{\footnotesize \par}
+
+{\footnotesize $\quad$left{[}1{]}=-5.0;}{\footnotesize \par}
+
+{\footnotesize $\:$\}}\\
+{\footnotesize \par}
+
+\textbf{\footnotesize $\:$void} {\footnotesize getrightmargin(}\textbf{\footnotesize double}
+{\footnotesize {*}right)}{\footnotesize \par}
+
+{\footnotesize $\:$\{}{\footnotesize \par}
+
+{\footnotesize $\quad$right{[}0{]}=5.0;}{\footnotesize \par}
+
+{\footnotesize $\quad$right{[}1{]}=5.0;}{\footnotesize \par}
+
+{\footnotesize $\:$\}}\\
+{\footnotesize \par}
+
+\textbf{\footnotesize $\:$double} {\footnotesize funmin(}\textbf{\footnotesize double}
+{\footnotesize {*}x)}{\footnotesize \par}
+
+{\footnotesize $\:$\{}{\footnotesize \par}
+
+{\footnotesize $\quad$}\textbf{\footnotesize double} {\footnotesize x1=x{[}0{]},x2=x{[}1{]}; }{\footnotesize \par}
+
+{\footnotesize $\quad$}\textbf{\footnotesize return} {\footnotesize 4{*}x1{*}x1-2.1{*}x1{*}x1{*}x1{*}x1+}{\footnotesize \par}
+
+{\footnotesize $\quad\quad$x1{*}x1{*}x1{*}x1{*}x1{*}x1/3.0+x1{*}x2-4{*}x2{*}x2+4{*}x2{*}x2{*}x2{*}x2; }{\footnotesize \par}
+
+{\footnotesize $\:$\}}\\
+{\footnotesize \par}
+
+\textbf{\footnotesize $\:$void} {\footnotesize granal(}\textbf{\footnotesize double}
+{\footnotesize {*}x,}\textbf{\footnotesize double} {\footnotesize {*}g)}{\footnotesize \par}
+
+{\footnotesize $\:$\{}{\footnotesize \par}
+
+{\footnotesize $\quad$}\textbf{\footnotesize double} {\footnotesize x1=x{[}0{]},x2=x{[}1{]}; }{\footnotesize \par}
+
+{\footnotesize $\quad$g{[}0{]}=8{*}x1-8.4{*}x1{*}x1{*}x1+2{*}x1{*}x1{*}x1{*}x1{*}x1+x2; }{\footnotesize \par}
+
+{\footnotesize $\quad$g{[}1{]}=x1-8{*}x2+16{*}x2{*}x2{*}x2; }{\footnotesize \par}
+
+{\footnotesize $\:$\}}{\footnotesize \par}
+
+{\footnotesize \}}
+\end{figure}
+%
+\begin{figure}
+
+\caption{Implementation of Camel function in Fortran 77.\label{cap:ImplementationFortran}}
+
+\textbf{\footnotesize integer function} {\footnotesize getdimension()}{\footnotesize \par}
+
+{\footnotesize getdimension = 2}{\footnotesize \par}
+
+\textbf{\footnotesize end}{\footnotesize }\\
+{\footnotesize \par}
+
+\textbf{\footnotesize subroutine} {\footnotesize getleftmargin(left)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize left(2)}{\footnotesize \par}
+
+{\footnotesize left(1)=-5.0}{\footnotesize \par}
+
+{\footnotesize left(2)=-5.0}{\footnotesize \par}
+
+\textbf{\footnotesize end}{\footnotesize }\\
+{\footnotesize \par}
+
+\textbf{\footnotesize subroutine} {\footnotesize getrightmargin(right)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize right(2)}{\footnotesize \par}
+
+{\footnotesize right(1)= 5.0}{\footnotesize \par}
+
+{\footnotesize right(2)= 5.0}{\footnotesize \par}
+
+\textbf{\footnotesize end}{\footnotesize }\\
+{\footnotesize \par}
+
+\textbf{\footnotesize double precision function} {\footnotesize funmin(x)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize x(2)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize x1,x2}{\footnotesize \par}
+
+{\footnotesize x1=x(1)}{\footnotesize \par}
+
+{\footnotesize x2=x(2)}{\footnotesize \par}
+
+{\footnotesize funmin=4{*}x1{*}{*}2-2.1{*}x1{*}{*}4+x1{*}{*}6/3.0+x1{*}x2-4{*}x2{*}{*}2+4{*}x2{*}{*}4}{\footnotesize \par}
+
+\textbf{\footnotesize end}{\footnotesize }\\
+{\footnotesize \par}
+
+\textbf{\footnotesize subroutine} {\footnotesize granal(x,g)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize x(2)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize g(2)}{\footnotesize \par}
+
+\textbf{\footnotesize double precision} {\footnotesize x1,x2}{\footnotesize \par}
+
+{\footnotesize x1=x(1)}{\footnotesize \par}
+
+{\footnotesize x2=x(2)}{\footnotesize \par}
+
+{\footnotesize g(1)=8.0{*}x1-8.4{*}x1{*}{*}3+2{*}x1{*}{*}{*}5+x2; }{\footnotesize \par}
+
+{\footnotesize g(2)=x1-8.0{*}x2+16.0{*}x2{*}{*}3; }{\footnotesize \par}
+
+\textbf{\footnotesize end}
+\end{figure}
+
+
+\end{document}

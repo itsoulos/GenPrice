@@ -1,0 +1,3795 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\begin_preamble
+\renewcommand{\baselinestretch}{2}
+\end_preamble
+\language greek
+\inputencoding default
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 4
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Genetically Controlled Random Search
+\layout Author
+
+Ioannis G.
+ Tsoulos, Isaac E.
+ Lagaris
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+Corresponding author.
+ Email: lagaris@cs.uoi.gr
+\end_inset 
+
+
+\layout Date
+
+Department of Computer Science, University of Ioannina, 
+\newline 
+P.O.
+ Box 1186, Ioannina 45110 - GREECE
+\layout Abstract
+
+A new stochastic method for locating the global minimum of a multidimensional
+ function inside a rectangular hyperbox is presented.
+ A sampling technique is employed that makes use of the procedure known
+ as grammatical evolution.
+ This method can be considered as a 
+\begin_inset Quotes eld
+\end_inset 
+
+genetic
+\begin_inset Quotes erd
+\end_inset 
+
+ modification to the controlled random search procedure due to Price.
+ We offer a comparison of the new method with others of similar structure,
+ by presenting results of computational experiments on a set of test functions.
+\layout Standard
+
+
+\series bold 
+PACS
+\series default 
+::02.60.-x ; 02.60.Pn ; 07.05.Kf;  02.70.Lq; 07.05.Mh 
+\layout Section*
+
+PROGRAM SUMMARY 
+\layout Standard
+
+
+\shape italic 
+Title of program
+\shape default 
+: GenPrice
+\layout Standard
+\align left 
+
+\shape italic 
+Catalogue identifier
+\shape default 
+:
+\layout Standard
+\align left 
+
+\shape italic 
+Program available from
+\shape default 
+: CPC Program Library, Queen's University of Belfast, N.
+ Ireland.
+\layout Standard
+\align left 
+
+\shape italic 
+Computer for which the program is designed and others on which it has been
+ tested
+\shape default 
+: The tool is designed to be portable in all systems running the GNU C++
+ compiler.
+ 
+\layout Standard
+\align left 
+
+\emph on 
+Installation
+\emph default 
+: University of Ioannina, Greece.
+\layout Standard
+\align left 
+
+\shape italic 
+Programming language used
+\shape default 
+: GNU-C++, GNU-C, GNU Fortran - 77.
+\layout Standard
+\align left 
+
+\emph on 
+Memory required to execute with typical data
+\emph default 
+: 200KB.
+\layout Standard
+\align left 
+
+\shape italic 
+No.
+ of bits in a word
+\shape default 
+: 32
+\layout Standard
+\align left 
+
+\emph on 
+No.
+ of processors used
+\emph default 
+: 1
+\layout Standard
+\align left 
+
+\emph on 
+Has the code been vectorised or parallelized?
+\emph default 
+: No.
+\layout Standard
+\align left 
+
+\emph on 
+No.
+ of bytes in distributed program,including test data etc
+\emph default 
+.: 100 Kbytes.
+\layout Standard
+\align left 
+
+\emph on 
+Distribution format
+\emph default 
+: gzipped tar file.
+\layout Standard
+\align left 
+
+\emph on 
+Keywords
+\emph default 
+: Global optimization, stochastic methods, genetic programming, grammatical
+ evolution.
+\layout Standard
+\align left 
+
+\emph on 
+Nature of physical problem
+\emph default 
+: A multitude of problems in science and engineering are often reduced to
+ minimizing a function of many variables.
+ There are instances that a local optimum does not correspond to the desired
+ physical solution and hence the search for a better solution is required.
+ Local optimization techniques are frequently trapped in local minima.
+ Global optimization is hence the appropriate tool.
+ For example, solving a non - linear system of equations via optimization,
+ one may encounter many local minima that do not correspond to solutions.
+ ( i.e.
+ they are far from zero)
+\layout Standard
+\align left 
+
+\emph on 
+Typical running time
+\emph default 
+: Depending on the objective function.
+\layout Section*
+
+LONG WRITE UP
+\layout Section
+
+Introduction
+\layout Standard
+
+A recurring problem in many applications is that of finding the global minimum
+ of a function.
+ This problem may be stated as: Determine 
+\begin_inset Formula \[
+x^{*}=\mbox{arg}\min_{x\in S}f(x)\]
+
+\end_inset 
+
+The non empty set 
+\begin_inset Formula $S\subset R^{n}$
+\end_inset 
+
+ considered here, is a hyper box defined as: 
+\begin_inset Formula \[
+S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]\]
+
+\end_inset 
+
+
+\layout Standard
+
+Recently several methods have been proposed for the solution of the global
+ optimization problem.
+ These methods can be divided in two main categories, deterministic and
+ stochastic.
+ Deterministic methods guarantee the convergence to the global minimum,
+ but they can be applied only under certain conditions and usually require
+ apriori information about the objective function 
+\begin_inset LatexCommand \cite{key-151}
+
+\end_inset 
+
+.
+ On the other hand, random search methods are widely used in the field of
+ global optimization, because they are easy to implement and do not need
+ apriori information about the objective function.
+ Various random search methods have been proposed, such as the Random Line
+ Search 
+\begin_inset LatexCommand \cite{key-1}
+
+\end_inset 
+
+, Adaptive Random Search 
+\begin_inset LatexCommand \cite{key-3,key-106,key-107}
+
+\end_inset 
+
+, Competitive Evolution 
+\begin_inset LatexCommand \cite{key-109}
+
+\end_inset 
+
+, Controlled Random Search 
+\begin_inset LatexCommand \cite{key-112,key-110,key-113,key-114,key-115}
+
+\end_inset 
+
+, Simulated Annealing 
+\begin_inset LatexCommand \cite{key-116,key-117,key-118,key-119,key-120,key-121,key-122}
+
+\end_inset 
+
+, Genetic Algorithms 
+\begin_inset LatexCommand \cite{key-123,key-124,key-125}
+
+\end_inset 
+
+, Differential Evolution 
+\begin_inset LatexCommand \cite{key-126,key-127}
+
+\end_inset 
+
+, methods based on Tabu Search 
+\begin_inset LatexCommand \cite{key-146}
+
+\end_inset 
+
+ etc.
+ The main disadvantage of random search methods is that they tend to perform
+ an excessive number of function evaluations in order to locate the global
+ minimum.
+ This article introduces a new sampling technique for use with conjunction
+ with Controlled Random Search.
+ The method is based on the genetic programming procedure known as Grammatical
+ Evolution.
+ The suggested approach uses a population of randomly created moves, which
+ guide the underlying stochastic search to the global minimum.
+ These random moves are produced by applying the method of grammatical evolution.
+ Grammatical evolution is an evolutionary process that can produce code
+ in an arbitrary language.
+ The production is performed using a mapping process governed by a grammar
+ expressed in Backus Naur Form.
+ Grammatical evolution has been applied successfully to problems such as
+ symbolic regression 
+\begin_inset LatexCommand \cite{key-130}
+
+\end_inset 
+
+, discovery of trigonometric identities 
+\begin_inset LatexCommand \cite{key-131}
+
+\end_inset 
+
+, robot control 
+\begin_inset LatexCommand \cite{key-132}
+
+\end_inset 
+
+, caching algorithms 
+\begin_inset LatexCommand \cite{key-133}
+
+\end_inset 
+
+, financial prediction 
+\begin_inset LatexCommand \cite{key-134}
+
+\end_inset 
+
+ etc.
+ The rest of this article is organized as follows: in section 
+\begin_inset LatexCommand \ref{sec:Description}
+
+\end_inset 
+
+ we give a brief presentation of the grammatical evolution and of the suggested
+ algorithms.
+ In section 
+\begin_inset LatexCommand \ref{sec:Experimental-results}
+
+\end_inset 
+
+ we list some experimental results from the application of the proposed
+ method and a comparison is made against traditional global optimization
+ methods and in section 
+\begin_inset LatexCommand \ref{sec:Software-documentation}
+
+\end_inset 
+
+ we present the installation and the execution procedures of the proposed
+ package.
+\layout Section
+
+Description of the algorithm 
+\begin_inset LatexCommand \label{sec:Description}
+
+\end_inset 
+
+
+\layout Subsection
+
+Grammatical evolution 
+\layout Standard
+
+Grammatical evolution is an evolutionary algorithm that can produce code
+ in any programming language.
+ The algorithm requires the grammar of the target language in BNF syntax
+ and the proper fitness function.
+ Chromosomes in grammatical evolution, in contrast to classical genetic
+ programming 
+\begin_inset LatexCommand \cite{key-129}
+
+\end_inset 
+
+, are not expressed as parse trees, but as vectors of integers.
+ Each integer denotes a production rule from the BNF grammar.
+ The algorithm starts from the start symbol of the grammar and gradually
+ creates the program string, by replacing non terminal symbols with the
+ right hand of the selected production rule.
+ The selection is performed in two steps:
+\layout Itemize
+
+Read an element from the chromosome (with value 
+\begin_inset Formula $V$
+\end_inset 
+
+).
+\layout Itemize
+
+Select the rule according to the scheme
+\begin_inset Formula \begin{equation}
+\mbox{Rule}=V\ \ \mbox{mod}\ \mbox{NR}\label{eq:eq2000}\end{equation}
+
+\end_inset 
+
+
+\layout Standard
+
+where NR is the number of rules for the specific non-terminal symbol.
+ The process of replacing non terminal symbols with the right hand of production
+ rules is continued until either a full program has been generated or the
+ end of chromosome has been reached.
+ In the latter case we can reject the entire chromosome or we can start
+ over (wrapping event) from the first element of the chromosome.
+ In our approach we allow at most two wrapping events to occur.
+ Further details about the grammatical evolution procedure can be found
+ in 
+\layout Subsection
+
+Proposed grammar 
+\layout Standard
+
+The proposed grammar is a small portion of the grammar of the C programming
+ language.
+ The grammar can be expressed as follows in BNF notation:
+\layout LyX-Code
+
+S::=<expr>
+\layout LyX-Code
+
+<expr>:=(<expr><binary_op><expr>)
+\layout LyX-Code
+
+       |<func_op>(<expr>)
+\layout LyX-Code
+
+       |<terminal>
+\layout LyX-Code
+
+<binary_op>::=+|-|*|/
+\layout LyX-Code
+
+<func_op>::=sin | cos | exp | log
+\layout LyX-Code
+
+<terminal>::=<digitlist>.<digitlist>
+\layout LyX-Code
+
+             |x
+\layout LyX-Code
+
+<digitlist>::=<digit>
+\layout LyX-Code
+
+             |<digit><digit>
+\layout LyX-Code
+
+             |<digit><digit><digit>
+\layout LyX-Code
+
+<digit>::=0|1|2|3|4|5|6|7|8|9
+\layout Standard
+
+As we can see the employed programming language supports four functions
+ and at most three digit numbers.
+ Note that it is straightforward to extend the function repertoire and upgrade
+ the support to multiple digit numbers.
+\layout Subsection
+
+Description of the GRS algorithm 
+\layout Description
+
+INPUT Data:
+\layout Itemize
+
+A point 
+\begin_inset Formula $x=\left(x_{1},x_{2},\ldots,x_{n}\right),\  x\in S\subset R^{n}$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\begin_inset Formula $\epsilon$
+\end_inset 
+
+, a small positive number.
+\layout Itemize
+
+
+\begin_inset Formula $k$
+\end_inset 
+
+, a small positive integer, usually between 10 and 20.
+\layout Description
+
+INITIALIZATION step:
+\layout Itemize
+
+The initialization of each element of the genetic population is performed
+ by selecting a random integer in the range [0,255].
+\layout Description
+
+LOOP Step:
+\layout Itemize
+
+
+\series bold 
+For
+\series default 
+ 
+\begin_inset Formula $i=1,...,k$
+\end_inset 
+
+ 
+\series bold 
+Do
+\begin_deeper 
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ 
+\begin_inset Formula $x_{\mbox{old}}=x$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Create
+\series default 
+ a new generation of chromosomes in the population with the use of the genetic
+ operations (crossover, mutation, reproduction).
+ The crossover procedure is performed with one - point crossover 
+\begin_inset LatexCommand \cite{key-124}
+
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+For
+\series default 
+ every chromosome 
+\series bold 
+Do
+\begin_deeper 
+\layout Itemize
+
+
+\series bold 
+Split
+\series default 
+ the chromosome into 
+\begin_inset Formula $n$
+\end_inset 
+
+ parts.
+ Each part corresponds to a random movement and each part is denoted by
+ 
+\begin_inset Formula $p_{i},\  i=1,\ldots,n$
+\end_inset 
+
+.
+ On every piece 
+\begin_inset Formula $p_{i}$
+\end_inset 
+
+ the grammatical evolution transformation is applied, which is based on
+ the proposed grammar.
+ This determines a univariate function 
+\begin_inset Formula $f_{i}$
+\end_inset 
+
+.
+ 
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ 
+\begin_inset Formula $d_{i}=f_{i}\left(x_{i}\right),\ \forall\  i=1,...,n$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Denote 
+\series default 
+by 
+\begin_inset Formula $d$
+\end_inset 
+
+ the vector 
+\begin_inset Formula $\left(d_{1},d_{2},...,d_{n}\right)$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Set 
+\series default 
+
+\begin_inset Formula $x_{+}=x+d$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+If 
+\series default 
+
+\begin_inset Formula $x_{+}\notin S$
+\end_inset 
+
+ or 
+\begin_inset Formula $f\left(x_{+}\right)>y$
+\end_inset 
+
+ 
+\series bold 
+then
+\begin_deeper 
+\layout Itemize
+
+
+\series bold 
+Set 
+\series default 
+
+\begin_inset Formula $x_{-}=x-d$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+If
+\series default 
+ 
+\begin_inset Formula $x_{-}\ \notin S$
+\end_inset 
+
+ or 
+\begin_inset Formula $f\left(x_{-}\right)>y$
+\end_inset 
+
+ , 
+\series bold 
+then
+\series default 
+ 
+\series bold 
+Set
+\series default 
+ the fitness value to a very large number.
+\layout Itemize
+
+
+\series bold 
+Else
+\series default 
+ 
+\series bold 
+Set
+\series default 
+ the fitness value to 
+\begin_inset Formula $f\left(x_{-}\right)$
+\end_inset 
+
+.
+\end_deeper 
+\layout Itemize
+
+
+\series bold 
+Endif
+\layout Itemize
+
+
+\series bold 
+Else
+\begin_deeper 
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ the fitness value to 
+\begin_inset Formula $f\left(x_{+}\right)$
+\end_inset 
+
+.
+\end_deeper 
+\layout Itemize
+
+
+\series bold 
+Endif
+\end_deeper 
+\layout Itemize
+
+
+\series bold 
+Endfor
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ 
+\begin_inset Formula $x_{g}=x+d_{\mbox{best}}$
+\end_inset 
+
+, where 
+\begin_inset Formula $d_{\mbox{best}}$
+\end_inset 
+
+ the movement that corresponds to the chromosome with the best fitness value.
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ 
+\begin_inset Formula $x=x_{g}$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+If
+\series default 
+ 
+\begin_inset Formula $\left|x-x_{\mbox{old}}\right|\le\epsilon$
+\end_inset 
+
+, terminate and 
+\series bold 
+return
+\series default 
+ 
+\begin_inset Formula $x$
+\end_inset 
+
+ as the located minimizer.
+\end_deeper 
+\layout Itemize
+
+
+\series bold 
+Endfor
+\layout Itemize
+
+
+\series bold 
+Return
+\series default 
+ 
+\begin_inset Formula $x$
+\end_inset 
+
+ as the located minimizer.
+\layout Subsection
+
+Genetically Controlled Random Search
+\layout Standard
+
+The Controlled Random Search is a population based optimization algorithm
+ and it has been applied successfully to many problems 
+\begin_inset LatexCommand \cite{key-139}
+
+\end_inset 
+
+ and is the base of our new procedure that is described above:
+\layout Description
+
+Initialization Step:
+\layout Itemize
+
+
+\series bold 
+Se
+\series default 
+t the value for the parameter 
+\begin_inset Formula $N$
+\end_inset 
+
+.
+ A commonly used value for that is 
+\begin_inset Formula $N=25n$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Set
+\series default 
+ a small positive value for 
+\begin_inset Formula $\epsilon$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Create
+\series default 
+ the set 
+\begin_inset Formula $T=\left\{ z_{1},z_{2},...,z_{N}\right\} $
+\end_inset 
+
+, by randomly sampling 
+\begin_inset Formula $N$
+\end_inset 
+
+ points from 
+\begin_inset Formula $S$
+\end_inset 
+
+.
+\layout Description
+
+Min_Max Step:
+\layout Itemize
+
+
+\series bold 
+Calculate
+\series default 
+ the points 
+\begin_inset Formula $z_{\mbox{min}}=\mbox{argmin}f(z)$
+\end_inset 
+
+ and 
+\begin_inset Formula $z_{\mbox{max}}=\mbox{argmax}f(z)$
+\end_inset 
+
+ and their function values 
+\begin_inset Formula \[
+f_{\mbox{max}}=\max_{z\in T}f(z)\]
+
+\end_inset 
+
+ and 
+\begin_inset Formula \[
+f_{\mbox{min}}=\min_{z\in T}f(z)\]
+
+\end_inset 
+
+
+\layout Itemize
+
+
+\series bold 
+If
+\series default 
+ 
+\begin_inset Formula $\left|f_{\mbox{max}}-f_{\mbox{min}}\right|<\epsilon$
+\end_inset 
+
+, 
+\series bold 
+then
+\series default 
+ 
+\series bold 
+goto
+\series default 
+ 
+\series bold 
+Local_Search
+\series default 
+ Step.
+\layout Description
+
+New_Point Step:
+\layout Itemize
+
+
+\series bold 
+Select
+\series default 
+ randomly the reduced set 
+\begin_inset Formula $\tilde{T}=\left\{ z_{T_{1}},z_{T_{2}},..,z_{T_{n+1}}\right\} $
+\end_inset 
+
+ from 
+\begin_inset Formula $T$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Compute
+\series default 
+ the centroid 
+\begin_inset Formula $G$
+\end_inset 
+
+: 
+\begin_inset Formula \[
+G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}\]
+
+\end_inset 
+
+
+\layout Itemize
+
+
+\series bold 
+Compute
+\series default 
+ a trial point 
+\begin_inset Formula $\tilde{z}=2G-z_{T_{n+1}}$
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+If
+\series default 
+ 
+\begin_inset Formula $\tilde{z}\ \notin S$
+\end_inset 
+
+ 
+\series bold 
+or
+\series default 
+ 
+\begin_inset Formula $f(\tilde{z})\ge f_{\mbox{max}}$
+\end_inset 
+
+ 
+\series bold 
+then 
+\series default 
+goto New_Point step.
+\layout Itemize
+
+
+\series bold 
+Perform
+\series default 
+ a call to GRS procedure using as starting point the point 
+\begin_inset Formula $\tilde{z}$
+\end_inset 
+
+.
+ This is the step that distinguishes the new method from the controlled
+ random search 
+\begin_inset LatexCommand \cite{key-112}
+
+\end_inset 
+
+.
+\layout Description
+
+Update Step:
+\layout Itemize
+
+
+\begin_inset Formula $T=T\ \cup\{\tilde{z}\}-\left\{ z_{\mbox{max}}\right\} $
+\end_inset 
+
+.
+\layout Itemize
+
+
+\series bold 
+Goto Min_Max 
+\series default 
+Step.
+\layout Description
+
+Local_Search Step:
+\layout Itemize
+
+
+\begin_inset Formula $z^{*}=\mbox{localSearch}(z)$
+\end_inset 
+
+.
+\layout Itemize
+
+Return the point 
+\begin_inset Formula $z^{*}$
+\end_inset 
+
+ as the discovered global minimum.
+\layout Section
+
+Experimental results
+\begin_inset LatexCommand \label{sec:Experimental-results}
+
+\end_inset 
+
+
+\layout Standard
+
+The Genetically Controlled Random Search (GCRS) was tested against 
+\layout Enumerate
+
+The original Controlled Random Search (CRS).
+ 
+\layout Enumerate
+
+The modified Controlled Random Search (PCRS) as described in 
+\begin_inset LatexCommand \cite{key-150}
+
+\end_inset 
+
+.
+\layout Standard
+
+We list also results from the Simulated Annealing (SA) as modified by Goffe
+ et al 
+\begin_inset LatexCommand \cite{key-122}
+
+\end_inset 
+
+ not for immediate comparison since the methods are quite different, but
+ only as a reference point (Their code 
+\family typewriter 
+simann.f
+\family default 
+ is available from the URL: http://www.netlib.org).
+\layout Standard
+
+The comparison is made using a a suite of well known test problems.
+ Each method was run 30 times on every problem using different random seeds.
+ We have measured the ability of the method to discover the global minimum
+ and the number of function evaluations it required.
+ In all cases the selection rate was set to 90% and the mutation rate to
+ 5%.
+ The length of each chromosome was set to 
+\begin_inset Formula $10\times d$
+\end_inset 
+
+, where 
+\begin_inset Formula $d$
+\end_inset 
+
+ is the dimensionality of the objective function and the maximum number
+ of iterations allowed in the GRS method (parameter 
+\begin_inset Formula $K$
+\end_inset 
+
+) was set to 10.
+ We used the suggested (ref.
+ 
+\begin_inset LatexCommand \cite{key-110}
+
+\end_inset 
+
+) value of 
+\begin_inset Formula $N=25n$
+\end_inset 
+
+, for the initial population in the methods CRS, PCRS and GCRS.
+ Similarly we employed the parameters suggested in the documentation of
+ the Simulated Annealing software, available from the URL http://www.netlib.org,
+ namely: 
+\begin_inset Formula $N_{S}=20,\  N_{T}=5,\  T=5.0,\  a=0.5,\ \mbox{TLAST}=4$
+\end_inset 
+
+ for SA.
+ All the experiments were conducted on an AMD ATHLON 2400+ equipped with
+ 256 MB Ram.
+ The hosting operating system was Debian Linux and the used programming
+ language was the GNU C++.
+ The trial steps produced by the grammatical evolution were evaluated using
+ the FunctionParser programming library 
+\begin_inset LatexCommand \cite{key-128}
+
+\end_inset 
+
+.
+ 
+\layout Subsection
+
+Test functions
+\layout Subsubsection*
+
+Camel
+\layout Standard
+
+
+\begin_inset Formula $f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4}$
+\end_inset 
+
+, 
+\begin_inset Formula $x\in[-5,5]^{2}$
+\end_inset 
+
+ with 6 local minima and global minimum 
+\begin_inset Formula $f^{*}=-1.031628453$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+Rastrigin
+\layout Standard
+
+
+\begin_inset Formula $f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2})$
+\end_inset 
+
+, 
+\begin_inset Formula $x\in[-1,1]^{2}$
+\end_inset 
+
+ with 49 local minima and global minimum 
+\begin_inset Formula $f^{*}=-2.0$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+Griewank2
+\layout Standard
+
+
+\begin_inset Formula $f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}}$
+\end_inset 
+
+, 
+\begin_inset Formula $x\in[-100,100]^{2}$
+\end_inset 
+
+ with 529 loca minima and global minimum 
+\begin_inset Formula $f^{*}=0.0$
+\end_inset 
+
+
+\layout Subsubsection*
+
+Gkls
+\layout Standard
+
+
+\begin_inset Formula $f(x)=\mbox{Gkls}(x,n,w)$
+\end_inset 
+
+, is a function with 
+\begin_inset Formula $w$
+\end_inset 
+
+ local minima, described in 
+\begin_inset LatexCommand \cite{key-149}
+
+\end_inset 
+
+, 
+\begin_inset Formula $x\in[-1,1]^{n},\  n\in[2,100]$
+\end_inset 
+
+.
+ In our experiments we use 
+\begin_inset Formula $n=2,3$
+\end_inset 
+
+ and 
+\begin_inset Formula $w=50$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+GoldStein & Price 
+\layout Standard
+
+
+\begin_inset Formula \begin{eqnarray*}
+f(x) & = & [1+(x_{1}+x_{2}+1)^{2}\\
+ &  & (19-14x_{1}+3x_{1}^{2}-14x_{2}+6x_{1}x_{2}+3x_{2}^{2})]\times\\
+ &  & [30+(2x_{1}-3x_{2})^{2}\\
+ &  & (18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2})]\end{eqnarray*}
+
+\end_inset 
+
+
+\layout Standard
+
+The function has 4 local minima in the range 
+\begin_inset Formula $[-2,2]^{2}$
+\end_inset 
+
+ and global minimum 
+\begin_inset Formula $f^{*}=3.0$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+Test2N 
+\layout Standard
+
+
+\begin_inset Formula \[
+f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i}\]
+
+\end_inset 
+
+with 
+\begin_inset Formula $x\in[-5,5]^{n}$
+\end_inset 
+
+.
+ The function has 
+\begin_inset Formula $2^{n}$
+\end_inset 
+
+ local minima in the specified range.
+ In our experiments we used the cases of 
+\begin_inset Formula $n=4,5,6,7$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+Test30N
+\layout Standard
+
+
+\begin_inset Formula \[
+f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)\]
+
+\end_inset 
+
+with 
+\begin_inset Formula $x\in[-10,10]^{n}$
+\end_inset 
+
+.
+ The function has 
+\begin_inset Formula $30^{n}$
+\end_inset 
+
+ local minima in the specified range.
+ In our experiments we used the cases of 
+\begin_inset Formula $n=3,4$
+\end_inset 
+
+.
+\layout Subsubsection*
+
+Potential
+\layout Standard
+
+The molecular conformation corresponding to the global minimum of the energy
+ of 
+\begin_inset Formula $N$
+\end_inset 
+
+ atoms interacting via the Lennard-Jones potential is determined for two
+ cases: with 
+\begin_inset Formula $N=3$
+\end_inset 
+
+ atoms and with 
+\begin_inset Formula $N=5$
+\end_inset 
+
+ atoms.
+ We refer to the first case as 
+\series bold 
+Potential(3)
+\series default 
+ (a problem with 9 variables) and to the second as 
+\series bold 
+Potential(5)
+\series default 
+ (a problem with 15 variables).
+ The global minimum for the first cases is 
+\begin_inset Formula $f^{*}=3$
+\end_inset 
+
+ and 
+\begin_inset Formula $f^{*}=-9.103852416$
+\end_inset 
+
+
+\layout Subsubsection*
+
+Neural
+\layout Standard
+
+A neural network (sigmoidal perceptron) with 10 hidden nodes (30 variables)
+ was used for the approximation of the function 
+\begin_inset Formula $g(x)=x\sin(x^{2}),\  x\in[-2,2]$
+\end_inset 
+
+.
+ The global minimum of the training error  is 
+\begin_inset Formula $f^{*}=0.0$
+\end_inset 
+
+
+\layout Subsection
+
+Results
+\layout Standard
+
+In table 
+\begin_inset LatexCommand \ref{cap:Experimental-results}
+
+\end_inset 
+
+ we list the results for the Simulated Annealing in the column labeled SA,
+ the Controlled Random Search in the column labeled CRS, the modified Controlled
+ Random Search in the column denoted by PCRS and the results from the proposed
+ Genetically Controlled Random Search in the column denoted by GCRS.
+ The numbers in the cells represent the average number of function evaluations
+ required by each method.
+ The number in parentheses denotes the ratio of runs that located the global
+ minimum and were not trapped in some local minimum.
+ Absence of this number denotes a success rate of 100%.
+ The proposed GCRS has shown superior performance among is peers.
+ This can deduced from the significant lower number of the required function
+ evaluations, and the percentage of runs that finding the global minimum.
+\begin_inset Float table
+wide false
+collapsed true
+
+\layout Caption
+
+Experimental results
+\begin_inset LatexCommand \label{cap:Experimental-results}
+
+\end_inset 
+
+
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="16" columns="5">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+FUNCTION
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+SA
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+CRS
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+PCRS
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+GCRS
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+CAMEL
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4820
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1852
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1409
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1504
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+RASTRIGIN
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4843
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1903
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1982
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+428
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+GRIEWANK2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4832(0.27)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2105
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2004
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+977
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+GKLS(2,50)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4820
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1627
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1495
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1220
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+GKLS(3,50)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+7228
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3349
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3059
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2056
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+GOLDSTEIN
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4842
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1923
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1456
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+961
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST2N(4)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9631
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+6835(0.97)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4831
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4280(0.97)
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST2N(5)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+12034(0.87)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+25270(0.97)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+12342
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+7958
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST2N(6)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+14438(0.66)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+32801(0.70)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+8840(0.87)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9914
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST2N(7)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+16840(0.37)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+38057(0.40)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+11751(0.63)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9740
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST30N(3)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+7930(0.23)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3703
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2124
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1519
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+TEST30N(4)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9858(0.23)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+5135
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4058
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1416
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+POTENTIAL(3)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+21404
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+198046
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+34985
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9265
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+POTENTIAL(5)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+36212
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+188646
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+39305
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9096
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+NEURAL
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+76667(0.93)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+122617
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+94016
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+14559
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\end_inset 
+
+
+\layout Section
+
+Software documentation
+\begin_inset LatexCommand \label{sec:Software-documentation}
+
+\end_inset 
+
+
+\layout Subsection
+
+Distribution 
+\layout Standard
+
+The package is distributed in a tar.gz file named 
+\family typewriter 
+GenPrice.tar.gz
+\family default 
+ and under UNIX systems the user must issue the following commands to extract
+ the associated files:
+\layout Enumerate
+
+gunzip 
+\family typewriter 
+GenPrice.tar.gz
+\layout Enumerate
+
+tar xfv 
+\family typewriter 
+GenPrice.tar
+\layout Standard
+
+These steps create a directory named 
+\family typewriter 
+GenPrice
+\family default 
+ with the following contents:
+\layout Enumerate
+
+
+\series bold 
+bin
+\series default 
+: A directory which is initially empty.
+ After compilation of the package, it will contain the executable 
+\series bold 
+make_genprice 
+\layout Enumerate
+
+
+\series bold 
+doc
+\series default 
+: This directory contains the documentation of the package (this file) in
+ different formats: A LyX file, A LaTeX file and a PostScript file.
+\layout Enumerate
+
+
+\series bold 
+examples
+\series default 
+: A directory that contains the test functions used in this article, written
+ in ANSI C++ and the Fortran77 version of the Six Hump Camel function.
+\layout Enumerate
+
+
+\series bold 
+include
+\series default 
+: A directory which contains the header files for all the classes of the
+ package.
+\layout Enumerate
+
+
+\series bold 
+src
+\series default 
+: A directory containing the source files of the package.
+\layout Enumerate
+
+
+\series bold 
+Makefile
+\series default 
+: The input file to the 
+\family typewriter 
+make
+\family default 
+ utility in order to build the tool.
+ Usually, the user does not need to change this file.
+\layout Enumerate
+
+
+\series bold 
+Makefile.inc
+\series default 
+: The file that contains some configuration parameters, such as the name
+ of the C++ compiler etc.
+ The user must edit and change this file before installation.
+\layout Subsection
+
+Installation 
+\layout Standard
+
+The following steps are required in order to build the tool:
+\layout Enumerate
+
+Uncompress the tool as described in the previous section.
+\layout Enumerate
+
+
+\family typewriter 
+cd GenPrice 
+\layout Enumerate
+
+Edit the file
+\family typewriter 
+ Makefile.inc 
+\family default 
+and change (if needed) the five configuration parameters.
+\layout Enumerate
+
+Type 
+\family typewriter 
+make
+\family default 
+.
+\layout Standard
+
+The five parameters in 
+\family typewriter 
+Makefile.inc
+\family default 
+ are the following:
+\layout Enumerate
+
+
+\series bold 
+CXX
+\series default 
+: It is the most important parameter.
+ It specifies the name of the C++ compiler.
+ In most systems running the GNU C++ compiler this parameter must be set
+ to g++.
+\layout Enumerate
+
+
+\series bold 
+CC
+\series default 
+: If the user written programs are in C, set this parameter to the name
+ of the C compiler.
+ Usually, for the GNU compiler suite, this parameter is set to gcc.
+\layout Enumerate
+
+
+\series bold 
+F77
+\series default 
+: If the user written programs are in Fortran 77, set this parameter to
+ the name of the Fortran 77 compiler.
+ For the GNU compiler suite a usual value for this parameter is g77.
+\layout Enumerate
+
+
+\series bold 
+F77FLAGS
+\series default 
+: The compiler GNU FORTRAN 77 (g77) appends an underscore to the name of
+ all subroutines and functions after the compilation of a Fortran source
+ file.
+ In order to prevent this from happening we can pass some flags to the compiler.
+ Normally, this parameter must be set to -fno-underscoring.
+ 
+\layout Enumerate
+
+
+\series bold 
+ROOTDIR
+\series default 
+: Is the location of the GenPrice directory.
+ It is critical for the system that this parameter is set correctly.
+ In most systems, it is the only parameter which must be changed.
+\layout Subsection
+
+User written subprograms 
+\layout Standard
+
+In figure 
+\begin_inset LatexCommand \ref{cap:Formulation-in-C}
+
+\end_inset 
+
+ we see the template of the objective function in the C programming language.
+ The same scheme is used also in C++, but the code has the line 
+\layout LyX-Code
+
+extern 
+\begin_inset Quotes eld
+\end_inset 
+
+C
+\begin_inset Quotes erd
+\end_inset 
+
+ {
+\layout Standard
+
+before the functions and the line 
+\layout LyX-Code
+
+}
+\layout Standard
+
+after them, in order to prevent the compiler from generating symbols that
+ will not cause problem to the linking process.
+ The template for Fortran 77 is given in figure 
+\begin_inset LatexCommand \ref{cap:Formulation-in-Fortran}
+
+\end_inset 
+
+.
+ The symbol d denotes the dimension of the objective function.
+ The meaning of the functions are the following:
+\layout Enumerate
+
+
+\series bold 
+getdimension
+\series default 
+(): It returns the dimension of the objective function.
+\layout Enumerate
+
+
+\series bold 
+getleftmargin
+\series default 
+(left): It fills the double precision array left with the left margins of
+ the objective function.
+ 
+\layout Enumerate
+
+
+\series bold 
+getrightmargin
+\series default 
+(right): It fills the double precision array right with the right margins
+ of the objective function.
+\layout Enumerate
+
+
+\series bold 
+funmin
+\series default 
+(x): It returns the value of the objective function evaluated at point x.
+\layout Enumerate
+
+
+\series bold 
+granal
+\series default 
+(x,g): It returns in a double precision array g the gradient of the objective
+ function at point x.
+\layout Subsection
+
+The utility make_genprice 
+\layout Standard
+
+After the compilation of the package, the executable 
+\family typewriter 
+make_genprice
+\family default 
+ will be placed in the subdirectory 
+\family typewriter 
+bin
+\family default 
+ in the distribution directory.
+ This program creates the final executable and it takes the following command
+ line parameters:
+\layout Enumerate
+
+
+\family typewriter 
+-h
+\family default 
+: Prints a help screen and terminates.
+\layout Enumerate
+
+
+\family typewriter 
+-p
+\family default 
+ 
+\series bold 
+filename
+\series default 
+: The
+\series bold 
+ filename
+\series default 
+ parameter specifies the name of the file containing the objective function.
+ The utility checks the suffix of the file and it uses the appropriate compiler.
+ If this suffix is .cc or .c++ or .CC or .cpp, then it invokes the C++ compiler.
+ If the suffix is .f or .F or .for then it invokes the Fortran 77 compiler.
+ Finally, if the suffix is .c it invokes the C compiler.
+\layout Enumerate
+
+
+\family typewriter 
+-o
+\family default 
+ filename: The 
+\series bold 
+filename
+\series default 
+ parameter specifies the name of the final executable.
+ The default value for this parameter is GenPrice.
+\layout Subsection
+
+The utility GenPrice 
+\layout Standard
+
+The final executable 
+\family typewriter 
+GenPrice
+\family default 
+ has the following command line parameters:
+\layout Enumerate
+
+
+\family typewriter 
+-h
+\family default 
+:The program prints a help and it terminates.
+\layout Enumerate
+
+
+\family typewriter 
+-c
+\family default 
+ 
+\family typewriter 
+count
+\family default 
+: The integer parameter 
+\family typewriter 
+count
+\family default 
+ specifies the number of chromosomes for the Genetic Random Search procedure.
+ The default value for this parameter is 20.
+\layout Enumerate
+
+
+\family typewriter 
+-s
+\family default 
+ 
+\family typewriter 
+srate
+\family default 
+: The double parameter 
+\family typewriter 
+srate
+\family default 
+ specifies the selection rate used in the Genetic Random Search procedure.
+ The default value for this parameter is 0.10 (10%).
+\layout Enumerate
+
+
+\family typewriter 
+-m
+\family default 
+ 
+\family typewriter 
+mrate
+\family default 
+: The double parameter 
+\family typewriter 
+mrate
+\family default 
+ specifies the mutation rate used in the Genetic Random Search procedure.
+ The default value for this parameter is 0.05 (5%).
+\layout Enumerate
+
+
+\family typewriter 
+-r
+\family default 
+ 
+\family typewriter 
+seed
+\family default 
+: The integer parameter 
+\family typewriter 
+seed
+\family default 
+ specifies the seed for the random number generator.
+ It can assume any integer value.
+\layout Enumerate
+
+
+\family typewriter 
+-o filename
+\family default 
+: The parameter 
+\family typewriter 
+filename
+\family default 
+ specifies the file where the output from the 
+\family typewriter 
+GenPrice
+\family default 
+ will be placed.
+ The default value for this parameter is the standard output.
+\layout Subsection
+
+A working example
+\layout Standard
+
+Consider the Six Hump Camel function given by
+\begin_inset Formula \[
+f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\  x\in[-5,5]^{2}\]
+
+\end_inset 
+
+ with 6 local minima.
+ The implementation of this function in C++ and in Fortran77 is shown in
+ figures 
+\begin_inset LatexCommand \ref{cap:Codification-of-Camel}
+
+\end_inset 
+
+ and 
+\begin_inset LatexCommand \ref{cap:ImplementationFortran}
+
+\end_inset 
+
+.
+ Let the file with the C++ code be named 
+\family typewriter 
+camel.cc 
+\family default 
+and that with the Fortran code 
+\family typewriter 
+camel.f.
+
+\family default 
+ Let these files be located in the 
+\family typewriter 
+examples 
+\family default 
+subdirectory.
+ Change to the 
+\family typewriter 
+examples
+\family default 
+ subdirectory and create the 
+\family typewriter 
+GenPrice
+\family default 
+ executable with the 
+\family typewriter 
+make_genprice
+\family default 
+ command:
+\layout LyX-Code
+
+../bin/make_genprice -p camel.cc
+\layout Standard
+
+or for the Fortran 77 version
+\layout LyX-Code
+
+../bin/make_genprice -p  camel.f
+\layout Standard
+
+The 
+\family typewriter 
+make_genprice
+\family default 
+ responds:
+\layout LyX-Code
+
+RUN ./GenPrice IN ORDER TO RUN THE PROBLEM 
+\layout Standard
+
+Run 
+\family typewriter 
+GenPrice 
+\family default 
+ by issuing the command:
+\layout LyX-Code
+
+./GenPrice  -c 10 -r 1
+\layout Standard
+
+The resulting output appears as:
+\layout LyX-Code
+
+FUNCTION EVALUATIONS = 1310 
+\layout LyX-Code
+
+GRADIENT EVALUATIONS = 20 
+\layout LyX-Code
+
+MINIMUM =  0.089842  -0.712656  -1.031628 
+\layout Bibliography
+\bibitem {key-151}
+
+T
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset 
+
+rn A.
+ and 
+\begin_inset Formula $\check{\mbox{Z}}$
+\end_inset 
+
+ilinskas A., Global Optimization Volume 350 of Lecture Notes in Computer
+ Science, Springer, Heidelberg, 1987.
+\layout Bibliography
+\bibitem {key-1}
+
+Bremermann H.
+ A., A method for unconstrained global optimization, Mathematical Biosciences
+ 9, 1-15 (4,8) 1970.
+\layout Bibliography
+\bibitem {key-3}
+
+McMurty C.
+ J and Fu K.S., A variable structure automation used as a multimodal searching
+ technique, IEEE Trans.
+ On Automatic Control 11, 379-387 (4), 1966.
+\layout Bibliography
+\bibitem {key-106}
+
+Schumer M.A.
+ and Steglitz K., Adaptive stepsize random search, IEEE Trans.
+ on Automatic Control 13, 270-276(4), 1969.
+\layout Bibliography
+\bibitem {key-107}
+
+Beltrami E.J.
+ and Indusi J.P., An adaptive random search algorithm for constrained optimization
+, IEEE Trans.
+ on Automatic Control 17, 1004-1007(4), 1972.
+\layout Bibliography
+\bibitem {key-109}
+
+Jarvis R.A., Adaptive global search by the process of competitive evolution,
+ IEEE Trans.
+ on Syst., Man and Cybergenetics 75, 297-311(4), 1975.
+\layout Bibliography
+\bibitem {key-112}
+
+Price W.
+ L., Global Optimization by Controlled Random Search, Computer Journal, Vol.
+ 20, pp.
+ 367-370, 1977.
+\layout Bibliography
+\bibitem {key-110}
+
+Price W.
+ L., A Controlled Random Search Procedure for Global Optimization, in 
+\begin_inset Quotes eld
+\end_inset 
+
+Towards Global Optimization 2
+\begin_inset Quotes erd
+\end_inset 
+
+, Edited by L.
+ C.
+ W.
+ Dixon and C.
+ P.
+ Szeg
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset 
+
+, North-Holland, Amsterdam, Holland, pp 71-84, 1978.
+\layout Bibliography
+\bibitem {key-113}
+
+Price W.
+ L., Global Optimization by Controlled Random Search, Journal of Optimization,
+ Theory and Applications, Vol.
+ 40, pp.
+ 333-348, 1983.
+\layout Bibliography
+\bibitem {key-114}
+
+Ali M.
+ M.
+ and Storey C., Modified Controlled Random Search Algorithms, Internation
+ Journal of Computer Mathematics, Vol.
+ 54, pp.
+ 229-235, 1995.
+\layout Bibliography
+\bibitem {key-115}
+
+Mohan C.
+ and Shanker K., A Controlled Random Search Technique for Global Optimization
+ using Quadratic Approximation, Asia-Pacific Journal of Operational Research,
+ Vol.
+ 11, pp.
+ 93-101, 1994.
+\layout Bibliography
+\bibitem {key-116}
+
+Cerny C., A Thermodynamical approach to the traveling salesman problem: an
+ efficient simulation algorithm, Technical Report, Institute of Physics
+ and Biophysics, Comenius University, Bratislava, 1982.
+\layout Bibliography
+\bibitem {key-117}
+
+Kirkpatrick S., Gelatt C.
+ D.
+ and Vecchi M.
+ P., Optimization by simulated annealing, Science 220, 671-680 (4), 1983.
+\layout Bibliography
+\bibitem {key-118}
+
+P.
+ J.
+ M.
+ van Laarhoven and E.
+ H.
+ L.
+ Aarts, 
+\begin_inset Quotes eld
+\end_inset 
+
+Simulated Annealing: Theory and Applications
+\begin_inset Quotes erd
+\end_inset 
+
+, 1987, D.
+ Riedel, Boston.
+\layout Bibliography
+\bibitem {key-119}
+
+Aarts E.
+ and Korst J., 
+\begin_inset Quotes eld
+\end_inset 
+
+Simulated Annealing and Boltzman Machines
+\begin_inset Quotes erd
+\end_inset 
+
+, 1989, John Wiley and Sons.
+\layout Bibliography
+\bibitem {key-120}
+
+Ingber L., 
+\begin_inset Quotes eld
+\end_inset 
+
+Simulated Annealing: Practice versus Theory
+\begin_inset Quotes erd
+\end_inset 
+
+, J.
+ Math.
+ Comput.
+ Modeling 18(1993), pp.
+ 29-57.
+\layout Bibliography
+\bibitem {key-121}
+
+Corana A., Marchesi M., Martini C.
+ and Ridella S., Minimizing Multimodal Functions of Continuous Variables
+ with the 
+\begin_inset Quotes eld
+\end_inset 
+
+Simulated Annealing
+\begin_inset Quotes erd
+\end_inset 
+
+ Algorithm, ACM Transactions on Mathematical Software, Vol.
+ 13, pp.
+ 262-280, 1987.
+\layout Bibliography
+\bibitem {key-122}
+
+Goffe W.
+ L., Ferrier G.
+ D.
+ and Rogers J., 
+\begin_inset Quotes eld
+\end_inset 
+
+Global Optimization of Statistical Functions with Simulated Annealing
+\begin_inset Quotes erd
+\end_inset 
+
+, J.
+ Econometrics 60(1994), pp.
+ 65-100.
+\layout Bibliography
+\bibitem {key-123}
+
+Goldberg D., Genetic Algorithms in Search, Optimization and Machine Learning,
+ Addison-Wesley Publishing Company, Reading, Massachussets, 1989.
+\layout Bibliography
+\bibitem {key-124}
+
+Michaelewizc Z., Genetic Algorithms + Data Structures = Evolution Programs,
+ Springer - Verlag, 1996.
+\layout Bibliography
+\bibitem {key-125}
+
+Yang R.
+ and Douglas I., Simple Genetic Algorithm with Local Tuning: Efficient Global
+ Optimization Technique, Journal of Optimization Theory and Applications,
+ Vol.
+ 98, No.
+ 2, pp.
+ 449-465, 1998.
+\layout Bibliography
+\bibitem {key-126}
+
+Storn R.
+ and Price K., Differential Evolution - A Simple and Efficient Heuristic
+ for Global Optimization over Continuous Spaces, Journal of Global Optimization,
+ Vol.
+ 11, pp.
+ 341-359, 1997.
+\layout Bibliography
+\bibitem {key-127}
+
+Ali M.
+ M.
+ and T
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset 
+
+rn A., Optimization of Carbon and Silicon Cluster Geometry for Tersoff Potential
+ using Differential Evolution, in 'Optimization in Computational Chemistry
+ and Molecular Biology', Edited by C.
+ A.
+ Floudas and P.
+ M.
+ Pardalos, Kluwer Acedemic Publisher, pp.
+ 287-300, 2000.
+\layout Bibliography
+\bibitem {key-130}
+
+M.
+ O'Neill and C.
+ Ryan, Grammatical Evolution: Evolutionary Automatic Programming in a Arbitrary
+ Language, volume 4 of Genetic programming.
+ Kluwer Academic Publishers, 2003.
+ 
+\layout Bibliography
+\bibitem {key-131}
+
+C.
+ Ryan, M.
+ O'Neill, and J.J.
+ Collins, 
+\begin_inset Quotes eld
+\end_inset 
+
+Grammatical Evolution: Solving Trigonometric Identities,
+\begin_inset Quotes erd
+\end_inset 
+
+ In proceedings of Mendel 1998: 4th International Mendel Conference on Genetic
+ Algorithms, Optimization Problems, Fuzzy Logic, Neural Networks, Rough
+ Sets., Brno, Czech Republic, June 24-26 1998.
+ Technical University of Brno, Faculty of Mechanical Engineering, pp.
+ 111-119.
+\layout Bibliography
+\bibitem {key-132}
+
+Collins J.
+ and Ryan C., 
+\begin_inset Quotes eld
+\end_inset 
+
+Automatic Generation of Robot Behaviors using Grammatical Evolution,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Proc.
+ of AROB 2000, the Fifth International Symposium on Artificial Life and
+ Robotics.
+\layout Bibliography
+\bibitem {key-133}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Automatic generation of caching algorithms,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Kaisa Miettinen, Marko M.
+ Mkel, Pekka Neittaanmki, and Jacques Periaux (eds.), Evolutionary Algorithms
+ in Engineering and Computer Science, Jyvskyl, Finland, 30 May - 3 June
+ 1999, John Wiley & Sons, pp.
+ 127-134, 1999.
+\layout Bibliography
+\bibitem {key-134}
+
+A.
+ Brabazon and M.
+ O'Neill, 
+\begin_inset Quotes eld
+\end_inset 
+
+A grammar model for foreign-exchange trading,
+\begin_inset Quotes erd
+\end_inset 
+
+ In H.
+ R.
+ Arabnia et al., editor, Proceedings of the International conference on Artificia
+l Intelligence, volume II, CSREA Press, 23-26 June 2003, pp.
+ 492-498, 2003.
+\layout Bibliography
+\bibitem {key-135}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Genetic code degeneracy: Implications for grammatical evolution and beyond,
+\begin_inset Quotes erd
+\end_inset 
+
+ In D.
+ Floreano, J.-D.
+ Nicoud, and F.
+ Mondada (eds.), Advances in Artificial Life, volume 1674 of LNAI, Lausanne,
+ 13-17 September 1999, Springer Verlag, page 149, 1999.
+\layout Bibliography
+\bibitem {key-136}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Under the hood of grammatical evolution,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Wolfgang Banzhaf, Jason Daida, Agoston E.
+ Eiben, Max H.
+ Garzon Vasant Honavar, Mark Jakiela, and Robert E.
+ Smith (eds.), Proceedings of the Genetic and Evolutionary Computation Conference
+, vol.
+ 2, Orlando, Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp.
+ 1143-1148, 1999.
+\layout Bibliography
+\bibitem {key-137}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Evolving Multi-Line Compilable C Programs,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Riccardo Poli, Peter Nordin, William B.
+ Langdon, and Terence C.
+ Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
+ Sweden, 26-27 May 1999.
+ Springer-Verlag, pp.
+ 83-92, 1999.
+\layout Bibliography
+\bibitem {key-138}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Grammatical Evolution,
+\begin_inset Quotes erd
+\end_inset 
+
+ IEEE Trans.
+ Evolutionary Computation, Vol.
+ 5, pp.
+ 349-358, 2001.
+\layout Bibliography
+\bibitem {key-129}
+
+J.
+ R.
+ Koza, Genetic Programming: On the programming of Computer by Means of Natural
+ Selection.
+ MIT Press: Cambridge, MA, 1992.
+\layout Bibliography
+\bibitem {key-128}
+
+Nieminen J.
+ and Yliluoma J., ``Function Parser for C++, v2.7'', available from http://www.stud
+ents.tut.fi/
+\begin_inset Formula $\tilde{}$
+\end_inset 
+
+warp/FunctionParser/.
+\layout Bibliography
+\bibitem {key-139}
+
+Ali M.
+ M., Storey C.
+ and T
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset 
+
+rn A., Application of some stochastic global optimization algorithms to practical
+ problems, Journal of Optimization Theory and Applications, Vol.
+ 95, No.
+ 3, pp.
+ 545-563, 1997.
+\layout Bibliography
+\bibitem {key-146}
+
+Cvijoivic D.
+ and Klinowski J., Taboo search.
+ An Approach to the Multiple Minima Problems, Science 667, pp.
+ 664-666, 1995.
+\layout Bibliography
+\bibitem {key-149}
+
+Gaviano M., Ksasov D.
+ E., Lera D.
+ and Sergeyev, Y.
+ D.
+ Software for generation of classes of test functions with known local and
+ global minima for global optimization, ACM Trans.
+ Math.
+ Softw.
+ 
+\series bold 
+29
+\series default 
+, pp.
+ 469-480, 2003.
+\layout Bibliography
+\bibitem {key-150}
+
+Theos F.V, Lagaris I.E.
+ and Papageorgiou D.G., PANMIN: sequential and parallel global optimization
+ procedures with a variety of options for the local search strategy Computer
+ Physics Communications Package, 159 (2004) pp.
+ 63-69
+\layout Standard
+
+
+\begin_inset Float figure
+placement h
+wide false
+collapsed true
+
+\layout Caption
+
+Formulation in C
+\begin_inset LatexCommand \label{cap:Formulation-in-C}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\series bold 
+int
+\series default 
+ getdimension()
+\layout Standard
+
+{
+\layout Standard
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+void
+\series default 
+ getleftmargin(
+\series bold 
+double
+\series default 
+ *left)
+\layout Standard
+
+{
+\layout Standard
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+void
+\series default 
+ getrightmargin(
+\series bold 
+double
+\series default 
+ *right)
+\layout Standard
+
+{
+\layout Standard
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+double
+\series default 
+ funmin(
+\series bold 
+double
+\series default 
+ *x)
+\layout Standard
+
+{
+\layout Standard
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+void
+\series default 
+ granal(
+\series bold 
+double
+\series default 
+ *x,
+\series bold 
+double
+\series default 
+ *g)
+\layout Standard
+
+{
+\layout Standard
+
+}
+\end_inset 
+
+
+\begin_inset Float figure
+placement h
+wide false
+collapsed true
+
+\layout Caption
+
+Formulation in Fortran 77
+\begin_inset LatexCommand \label{cap:Formulation-in-Fortran}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\series bold 
+integer function
+\series default 
+ getdimension()
+\layout Standard
+
+getdimension = d
+\layout Standard
+
+
+\series bold 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+subroutine 
+\series default 
+getleftmargin(left)
+\layout Standard
+
+
+\series bold 
+double precision
+\series default 
+ left(d)
+\layout Standard
+
+
+\series bold 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+subroutine
+\series default 
+ getrightmargin(right)
+\layout Standard
+
+
+\series bold 
+double precision
+\series default 
+ right(d)
+\layout Standard
+
+
+\series bold 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+double precision function
+\series default 
+ funmin(x)
+\layout Standard
+
+
+\series bold 
+double precision
+\series default 
+ x(d)
+\layout Standard
+
+
+\series bold 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+subroutine
+\series default 
+ granal(x,g)
+\layout Standard
+
+
+\series bold 
+double precision
+\series default 
+ x(d)
+\layout Standard
+
+
+\series bold 
+double precision
+\series default 
+ g(d)
+\layout Standard
+
+
+\series bold 
+end
+\end_inset 
+
+
+\begin_inset Float figure
+placement h
+wide false
+collapsed true
+
+\layout Caption
+
+Implementation of Camel function in C++.
+\begin_inset LatexCommand \label{cap:Codification-of-Camel}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+extern
+\series default 
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+C
+\begin_inset Quotes erd
+\end_inset 
+
+{
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+
+\begin_inset Formula $\;$
+\end_inset 
+
+int
+\series default 
+ getdimension()
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+{
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+return
+\series default 
+ 2;
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+void
+\series default 
+ getleftmargin(
+\series bold 
+double
+\series default 
+ *left)
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+{
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+left[0]=-5.0;
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+left[1]=-5.0;
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+void
+\series default 
+ getrightmargin(
+\series bold 
+double
+\series default 
+ *right)
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+{
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+right[0]=5.0;
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+right[1]=5.0;
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+double
+\series default 
+ funmin(
+\series bold 
+double
+\series default 
+ *x)
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+{
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ x1=x[0],x2=x[1]; 
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+return
+\series default 
+ 4*x1*x1-2.1*x1*x1*x1*x1+
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad\quad$
+\end_inset 
+
+x1*x1*x1*x1*x1*x1/3.0+x1*x2-4*x2*x2+4*x2*x2*x2*x2; 
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+void
+\series default 
+ granal(
+\series bold 
+double
+\series default 
+ *x,
+\series bold 
+double
+\series default 
+ *g)
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+{
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ x1=x[0],x2=x[1]; 
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+g[0]=8*x1-8.4*x1*x1*x1+2*x1*x1*x1*x1*x1+x2; 
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+g[1]=x1-8*x2+16*x2*x2*x2; 
+\layout Standard
+
+
+\size footnotesize 
+
+\begin_inset Formula $\:$
+\end_inset 
+
+}
+\layout Standard
+
+
+\size footnotesize 
+}
+\end_inset 
+
+
+\begin_inset Float figure
+wide false
+collapsed true
+
+\layout Caption
+
+Implementation of Camel function in Fortran 77.
+\begin_inset LatexCommand \label{cap:ImplementationFortran}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+integer function
+\series default 
+ getdimension()
+\layout Standard
+
+
+\size footnotesize 
+getdimension = 2
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+subroutine 
+\series default 
+getleftmargin(left)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ left(2)
+\layout Standard
+
+
+\size footnotesize 
+left(1)=-5.0
+\layout Standard
+
+
+\size footnotesize 
+left(2)=-5.0
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+subroutine
+\series default 
+ getrightmargin(right)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ right(2)
+\layout Standard
+
+
+\size footnotesize 
+right(1)= 5.0
+\layout Standard
+
+
+\size footnotesize 
+right(2)= 5.0
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision function
+\series default 
+ funmin(x)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ x(2)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ x1,x2
+\layout Standard
+
+
+\size footnotesize 
+x1=x(1)
+\layout Standard
+
+
+\size footnotesize 
+x2=x(2)
+\layout Standard
+
+
+\size footnotesize 
+funmin=4*x1**2-2.1*x1**4+x1**6/3.0+x1*x2-4*x2**2+4*x2**4
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+end
+\series default 
+
+\newline 
+
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+subroutine
+\series default 
+ granal(x,g)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ x(2)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ g(2)
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+double precision
+\series default 
+ x1,x2
+\layout Standard
+
+
+\size footnotesize 
+x1=x(1)
+\layout Standard
+
+
+\size footnotesize 
+x2=x(2)
+\layout Standard
+
+
+\size footnotesize 
+g(1)=8.0*x1-8.4*x1**3+2*x1***5+x2; 
+\layout Standard
+
+
+\size footnotesize 
+g(2)=x1-8.0*x2+16.0*x2**3; 
+\layout Standard
+
+
+\series bold 
+\size footnotesize 
+end
+\end_inset 
+
+
+\the_end
