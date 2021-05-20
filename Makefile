@@ -7,6 +7,7 @@ all:
 
 clean:
 	(rm -f *~; cd src; make clean )
+	(mkdir -p bin; ) 
 	(rm -f bin/make_genprice )
 	(rm -f bin/GenPrice )
 ###############################################################################
