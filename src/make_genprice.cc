@@ -115,7 +115,7 @@ int main(int argc,char **argv)
 		return printf("THE COMPILATION OF %s HAS BEEN FAILED\n",problemfile);
 	}
 
-	sprintf(compile_command2,"%s %s myproblem.o -o %s",CXX,cmdline,outputfile);
+	sprintf(compile_command2,"%s %s %s  myproblem.o -o %s",CXX,CXXFLAGS,cmdline,outputfile);
 
 	unlink(outputfile);
 
