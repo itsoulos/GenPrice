@@ -8,5 +8,5 @@ CXX = g++
 CC  = gcc
 F77 = g77
 F77FLAGS = -fno-underscoring
-CXXFLAGS = -O4
+CXXFLAGS = -O4 -fopt-info -fopenmp
 ROOTDIR = /home/sheridan/Desktop/ERGASIES/GenPrice/

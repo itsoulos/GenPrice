@@ -49,7 +49,7 @@ symbol.o: symbol.cc
 	$(CXX) $(CXXFLAGS) symbol.cc -I. -I../include -c
 
 make_genprice: make_genprice.cc
-	$(CXX) make_genprice.cc -DCC=\"$(CC)\" -DCXX=\"$(CXX)\" -DCXXFLAGS=\"$(CXXFLAGS)\" -DF77=\"$(F77)\" -DF77FLAGS=\"$(F77FLAGS)\" -DROOTDIR=\"$(ROOTDIR)\" -o make_genprice
+	$(CXX) make_genprice.cc -DCC=\"$(CC)\" -DCXX=\"$(CXX)\" -DCXXFLAGS=\"'$(CXXFLAGS)'\" -DF77=\"$(F77)\" -DF77FLAGS=\"$(F77FLAGS)\" -DROOTDIR=\"$(ROOTDIR)\" -o make_genprice
 	mv make_genprice ../bin
 
 clean:
