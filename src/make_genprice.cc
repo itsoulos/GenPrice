@@ -5,8 +5,8 @@
 # include <unistd.h>
 
 const char *short_options="hp:o:";
-char problemfile[1024];
-char outputfile[1024];
+char problemfile[10240];
+char outputfile[10240];
 
 void	print_usage()
 {
@@ -87,15 +87,15 @@ int main(int argc,char **argv)
 	{
 		strcpy(compiler,CC);
 	}
-	char compile_command1[1024];
-	char compile_command2[1024];
+	char compile_command1[10240];
+	char compile_command2[10240];
 	char rootdir[1024];
 	strcpy(rootdir,ROOTDIR);
 
 	char	files[14][1024]={"tolmin.o","collection.o","doublestack.o","fparser.o","genprice.o",
 		"genpricemain.o","get_options_price.o","grs.o","rlsprogram.o","population.o","problem.o",
 		"program.o","rule.o","symbol.o"};
-	char	cmdline[2048];
+	char	cmdline[20480];
 	strcpy(cmdline,"");
 	for(int i=0;i<14;i++)
 	{
@@ -106,7 +106,7 @@ int main(int argc,char **argv)
 	if(!strcmp(compiler,F77))
 		sprintf(compile_command1,"%s %s -c %s -o myproblem.o",compiler,F77FLAGS,problemfile);
 	else
-		sprintf(compile_command1,"%s -c %s -o myproblem.o",compiler,problemfile);
+		sprintf(compile_command1,"%s %s  -c %s -o myproblem.o",compiler,CXXFLAGS,problemfile);
 
 
 	int code1=system(compile_command1);
