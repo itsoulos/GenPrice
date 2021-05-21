@@ -1525,7 +1525,7 @@ BF1
 \begin_inset Text
 
 \begin_layout Plain Layout
-842
+1536
 \end_layout
 
 \end_inset
@@ -1563,7 +1563,7 @@ BF2
 \begin_inset Text
 
 \begin_layout Plain Layout
-857
+1606
 \end_layout
 
 \end_inset
@@ -1601,7 +1601,7 @@ BRANIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-1627
+1869
 \end_layout
 
 \end_inset
@@ -1639,7 +1639,7 @@ CAMEL
 \begin_inset Text
 
 \begin_layout Plain Layout
-1358
+2058
 \end_layout
 
 \end_inset
@@ -1677,7 +1677,7 @@ DIFFPOWER20
 \begin_inset Text
 
 \begin_layout Plain Layout
-36791
+15177
 \end_layout
 
 \end_inset
@@ -1715,7 +1715,7 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-813
+590
 \end_layout
 
 \end_inset
@@ -1753,7 +1753,7 @@ EXP4
 \begin_inset Text
 
 \begin_layout Plain Layout
-694
+3453
 \end_layout
 
 \end_inset
@@ -1791,7 +1791,7 @@ EXP8
 \begin_inset Text
 
 \begin_layout Plain Layout
-1158
+12370
 \end_layout
 
 \end_inset
@@ -1829,7 +1829,7 @@ EXP16
 \begin_inset Text
 
 \begin_layout Plain Layout
-4185
+32930
 \end_layout
 
 \end_inset
@@ -1867,7 +1867,7 @@ GKLS350
 \begin_inset Text
 
 \begin_layout Plain Layout
-2191
+3483
 \end_layout
 
 \end_inset
@@ -1905,7 +1905,7 @@ GKLS3100
 \begin_inset Text
 
 \begin_layout Plain Layout
-2103(0.90)
+3397
 \end_layout
 
 \end_inset
@@ -1943,7 +1943,7 @@ GUILIN550
 \begin_inset Text
 
 \begin_layout Plain Layout
-2562
+6548
 \end_layout
 
 \end_inset
@@ -1981,7 +1981,7 @@ GUILIN1050
 \begin_inset Text
 
 \begin_layout Plain Layout
-5243
+23812
 \end_layout
 
 \end_inset
@@ -2019,7 +2019,7 @@ GRIEWANK2
 \begin_inset Text
 
 \begin_layout Plain Layout
-953
+1126
 \end_layout
 
 \end_inset
@@ -2057,7 +2057,7 @@ GRIEWANK10
 \begin_inset Text
 
 \begin_layout Plain Layout
-5918(0.73)
+29465
 \end_layout
 
 \end_inset
@@ -2095,7 +2095,7 @@ HARTMAN3
 \begin_inset Text
 
 \begin_layout Plain Layout
-1099
+2883
 \end_layout
 
 \end_inset
@@ -2133,7 +2133,7 @@ HARTMAN6
 \begin_inset Text
 
 \begin_layout Plain Layout
-3105(0.93)
+8929
 \end_layout
 
 \end_inset
@@ -2171,7 +2171,7 @@ POTENTIAL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-7668
+20541
 \end_layout
 
 \end_inset
@@ -2209,7 +2209,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-418
+795
 \end_layout
 
 \end_inset
@@ -2247,7 +2247,7 @@ ROSENBROCK10
 \begin_inset Text
 
 \begin_layout Plain Layout
-3246
+26598
 \end_layout
 
 \end_inset
@@ -2285,7 +2285,7 @@ ROSENBROCK20
 \begin_inset Text
 
 \begin_layout Plain Layout
-18567
+62401
 \end_layout
 
 \end_inset
@@ -2323,7 +2323,7 @@ SHEKEL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-4080(0.77)
+6500
 \end_layout
 
 \end_inset
@@ -2361,7 +2361,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-5070(0.73)
+6825
 \end_layout
 
 \end_inset
@@ -2399,7 +2399,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-5594(0.70)
+6879
 \end_layout
 
 \end_inset
@@ -2437,7 +2437,7 @@ SINU4
 \begin_inset Text
 
 \begin_layout Plain Layout
-3411
+5094
 \end_layout
 
 \end_inset
@@ -2475,7 +2475,7 @@ SINU8
 \begin_inset Text
 
 \begin_layout Plain Layout
-9972
+15645
 \end_layout
 
 \end_inset
@@ -2513,7 +2513,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-4634
+5663
 \end_layout
 
 \end_inset
@@ -2551,7 +2551,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-6254
+8363
 \end_layout
 
 \end_inset
@@ -2589,7 +2589,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-8953
+13549
 \end_layout
 
 \end_inset
@@ -2627,7 +2627,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-11397
+20576
 \end_layout
 
 \end_inset
@@ -2665,7 +2665,7 @@ ZAKHAROV32
 \begin_inset Text
 
 \begin_layout Plain Layout
-49508
+1947
 \end_layout
 
 \end_inset

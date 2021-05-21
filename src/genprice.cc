@@ -52,7 +52,7 @@ bool	GenPrice::check()
 		oldBesty = fmin;
 		stopat = variance / 2.0;
 	}
-	printf("GCRS. Iteration: %4d Fitness: %10.5lf Variance: %10.5lf Stopat: %10.5lf \n", miters, fmin, variance, stopat);
+	//printf("GCRS. Iteration: %4d Fitness: %10.5lf Variance: %10.5lf Stopat: %10.5lf \n", miters, fmin, variance, stopat);
 	if (variance <= stopat && miters >= 1000)
 	{
 
@@ -67,7 +67,7 @@ bool	GenPrice::check()
 
 void GenPrice::Solve()
 {
-	bool newprice=false;
+	bool newprice=true;
 	bool usegrs=false;
 	int dimension = problem->getDimension();
 	Collection *sample2 = new Collection(dimension);
@@ -187,9 +187,8 @@ step2:
 	if (!problem->isPointIn(xk))
 		goto step2;
 	fk = problem->funmin(xk);
-	//Info.iters=3;
-	if(usegrs)
-	Solver->Solve(xk,fk);
+	//if(usegrs)
+	//Solver->Solve(xk,fk);
 	success += (fk <= fmax);
 	if (fk <= fmax)
 	{
@@ -199,7 +198,7 @@ step2:
 	}
 
 step3:
-	if(!newprice) goto step2;
+	if(!newprice ) goto step2;
 	if (fk > fmax)
 	{
 		if (success * 1.0 / iters > 0.5)
@@ -214,7 +213,8 @@ step3:
 			if (!problem->isPointIn(xk))
 				goto step2;
 			fk = problem->funmin(xk);
-	fk=tolmin(xk,Info,10);	
+	Solver->Solve(xk,fk);
+	//fk=tolmin(xk,Info,10);	
 			success += (fk <= fmax);
 			if (fk < fmax)
 			{
