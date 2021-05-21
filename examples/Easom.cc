@@ -1,7 +1,5 @@
 # include <math.h>
 
-using namespace std;
-
 extern "C"
 {
 
@@ -14,19 +12,16 @@ int	getdimension()
 	return 2;
 }
 
-
-
 void	getleftmargin(double *x)
 {
-	x[0]=-100.0;
-	x[1]= 100.0;
+	for(int i=0;i<getdimension();i++) x[i]=-100.0;
 }
 
 void	getrightmargin(double *x)
 {
-	x[0]=100.0;
-	x[1]=100.0;
+	for(int i=0;i<getdimension();i++) x[i]= 100.0;
 }
+
 double	funmin(double *x)
 {
 	return -cos(x[0])*cos(x[1]*exp(-(pow(x[0]-M_PI,2.0)+pow(x[1]-M_PI,2.0))));

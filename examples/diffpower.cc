@@ -8,7 +8,7 @@ extern "C"
 	{
 		return a>b?a:b;
 	}
-	int DIMENSION=10;
+	int DIMENSION=20;
 
 
 void	getleftmargin(double *x)

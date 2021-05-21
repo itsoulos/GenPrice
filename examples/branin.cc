@@ -1,6 +1,5 @@
 # include <math.h>
 
-using namespace std;
 extern "C"
 {
 	
@@ -9,24 +8,23 @@ extern "C"
 		return a>b?a:b;
 	}
 
-
 int	getdimension()
 {
 	return 2;
 }
 
-
 void	getleftmargin(double *x)
 {
 	x[0]=-5;
-	x[1]= 0.0;
+	x[1]=0;
 }
 
 void	getrightmargin(double *x)
 {
-	x[0]=10.0;
-	x[1]=15.0;
+	x[0]=10;
+	x[1]=15;
 }
+
 double	funmin(double *x)
 {
 	double x1=x[0];

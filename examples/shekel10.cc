@@ -1,7 +1,5 @@
 # include <math.h>
 
-using namespace std;
-
 extern "C"
 {
 
@@ -10,6 +8,10 @@ int	getdimension()
 	return 4;
 }
 
+int	hasmargins()
+{
+	return 1;
+}
 
 void	getleftmargin(double *x)
 {
@@ -18,7 +20,7 @@ void	getleftmargin(double *x)
 
 void	getrightmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]= 10.0;
+	for(int i=0;i<getdimension();i++) x[i]=10.0;
 }
 
 double	funmin(double *x)

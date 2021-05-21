@@ -1,29 +1,31 @@
 # include <math.h>
-using namespace std;
-
 
 extern "C"
 {
+
 int	getdimension()
 {
 	return 10;
 }
 
-
+int	hasmargins()
+{
+	return 1;
+}
 
 void	getleftmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]=-600;
+	for(int i=0;i<10;i++) x[i]=-600.0;
 }
 
 void	getrightmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]= 600;
+	for(int i=0;i<10;i++) x[i]=600.0;
 }
 
-double  funmin(double *x)
+double	funmin(double *x)
 {
-        int n=10;
+	int n=10;
         double sum=0.0;
         double product=1.0;
         for(int i=0;i<n;i++)
@@ -34,9 +36,10 @@ double  funmin(double *x)
         return sum+1.0-product;
 
 }
+
 void    granal(double *x,double *g)
 {
-         int n=10;
+	 int n=10;
         for(int i=0;i<n;i++)
         {
             double product=1.0;
@@ -48,7 +51,5 @@ void    granal(double *x,double *g)
             g[i]=x[i]/2000.0+sin(x[i]/sqrt(i+1.0))*product/sqrt(i+1.0);
         }
 }
-
-
 
 }

@@ -1,12 +1,11 @@
 # include <math.h>
-using namespace std;
+
 extern "C"
 {
 	static double dmax(double a,double b)
 	{
 		return a>b?a:b;
 	}
-
 
 int	getdimension()
 {
@@ -15,13 +14,18 @@ int	getdimension()
 
 void	getleftmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]=-0.0;
+	x[0]=0;
+	x[1]=0;
+	x[2]=0;
 }
 
 void	getrightmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]= 1;
+	x[0]=1;
+	x[1]=1;
+	x[2]=1;
 }
+
 double	funmin(double *x)
 {
 	static double a[4][3]={{3,10,30},{0.1,10,35},{3,10,30},{0.1,10,35}};

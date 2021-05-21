@@ -8,14 +8,19 @@ int	getdimension()
 	return	3 * NAT;
 }
 
+int	hasmargins()
+{
+	return 1;
+}
+
 void	getleftmargin(double *x)
 {
-	for(int i=0;i<3*NAT;i++) x[i]= -10;
+	for(int i=0;i<3*NAT;i++) x[i]= -1;
 }
 
 void	getrightmargin(double *x)
 {
-	for(int i=0;i<3*NAT; i++) x[i]= 10;
+	for(int i=0;i<3*NAT; i++) x[i]= 1;
 }
 
 
@@ -48,10 +53,13 @@ double	funmin(double *x)
 		yy[i-1]=x[i3-1-1];
 		zz[i-1]=x[i3-1];
 	}
-	for(int i=1;i<=NAT-1;i++)
+	//for(int i=1;i<=NAT-1;i++)
+	for(int i=1;i<=NAT;i++)
 	{
-		for(int j=i+1;j<=NAT;j++)
+		//for(int j=i+1;j<=NAT;j++)
+		for(int j=1;j<=NAT;j++)
 		{
+			if(i==j) continue;
 			double dx=xx[i-1]-xx[j-1];
 			double dy=yy[i-1]-yy[j-1];
 			double dz=zz[i-1]-zz[j-1];
@@ -62,23 +70,50 @@ double	funmin(double *x)
 	delete[] xx;
 	delete[] yy;
 	delete[] zz;
-	if(isinf(value) || isnan(value)) value=1e+10;
-	return value;
+	return 0.5 * value;
 }
 
-
-void	granal(double *x,double *g)
+double gpot(double r)
 {
-	for(int i=0;i<3 * NAT;i++)
-	{
-		double eps=pow(1e-18,1.0/3.0)*dmax(1.0,fabs(x[i]));
-		x[i]+=eps;
-		double v1=funmin(x);
-		x[i]-=2.0 *eps;
-		double v2=funmin(x);
-		g[i]=(v1-v2)/(2.0 * eps);
-		x[i]+=eps;
-	}
+
+	double eps = 1.0, sig = 1.0;
+        double eps4 = 4*eps;
+        double sl = 0.0;
+
+        double sbyr7 = pow((sig/r),7);
+        double sbyr6 = pow((sig/r),6);
+        return eps4*sbyr6*(-12.0*sbyr7 + 6.0*(sig/r))+sl/(r*r);
+
 }
+
+void    granal(double *x,double *g)
+{
+	int natoms=NAT;
+    for(int i=1;i<=natoms;i++)
+    {
+	    int i31=3*i; 
+	    int idim=3 * i;
+	    g[idim-1]=0.0;
+	    g[idim-1-1]=0.0;
+	    g[idim-2-1]=0.0;
+	    for(int j=1;j<=natoms;j++)
+	    {
+		    int i32=3*j;
+		    if(j!=i)
+		    {
+			double rij = sqrt( (x[i31-2-1] - x[i32-2-1])*(x[i31-2-1] - x[i32-2-1])+
+                                              (x[i31-1-1] - x[i32-1-1])*(x[i31-1-1] - x[i32-1-1])+
+                                              (x[i31-1] - x[i32-1])*(x[i31-1] - x[i32-1]) );
+
+			double gp = gpot(rij);
+			g[idim-2-1]+=gp* (x[i31-2-1] - x[i32-2-1])/rij;
+			g[idim-1-1]+=gp*(x[i31-1-1] - x[i32-1-1])/rij;
+			g[idim-1]+=gp*(x[i31-1] - x[i32-1])/rij;
+		    }
+	    }
+    }
+
+}
+
 
 }

@@ -1,16 +1,13 @@
 # include <math.h>
 
-using namespace std;
-
 extern "C"
 {
-
-
 
 int	getdimension()
 {
 	return 2;
 }
+
 void	getleftmargin(double *x)
 {
 	x[0]=-10.0;
@@ -19,9 +16,10 @@ void	getleftmargin(double *x)
 
 void	getrightmargin(double *x)
 {
-	x[0]=10.0;
-	x[1]=10.0;
+	x[0]= 10.0;
+	x[1]= 10.0;
 }
+
 double	funmin(double *x)
 {
 	double sum1=0.0;

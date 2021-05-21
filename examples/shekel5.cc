@@ -1,6 +1,5 @@
 # include <math.h>
-
-using namespace std;
+# include <stdio.h>
 
 extern "C"
 {
@@ -14,16 +13,21 @@ int	getdimension()
 	return 4;
 }
 
+int	hasmargins()
+{
+	return 1;
+}
 
 void	getleftmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]=0.0;
+	for(int i=0;i<4;i++) x[i]=0.0;
 }
 
 void	getrightmargin(double *x)
 {
-	for(int i=0;i<getdimension();i++) x[i]= 10.0;
+	for(int i=0;i<4;i++) x[i]=10.0;
 }
+
 double	funmin(double *x)
 {
 	static double a[5][4]={{4,4,4,4},{1,1,1,1},{8,8,8,8},{3,7,3,7}};
@@ -55,6 +59,5 @@ void    granal(double *x,double *g)
 		g[j]=s;
         }
 }
-
 
 }
