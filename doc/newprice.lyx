@@ -80,17 +80,65 @@ Improving the controlled random search method for global optimization problems
 \end_layout
 
 \begin_layout Author
-Vasileios Charilogis, Ioannis G.
- Tsoulos, Alexandros Tzallas
+Vasileios Charilogis
+\begin_inset Formula $^{(1)}$
+\end_inset
+
+, Nikolaos Anastasopoulos
+\begin_inset Formula $^{(2)}$
+\end_inset
+
+, Ioannis G.
+ Tsoulos
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Corresponding author.
+ Email: itsoulos@uoi.gr
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $^{(1)}$
+\end_inset
+
+, 
+\begin_inset Newline newline
+\end_inset
+
+Alexandros Tzallas
+\begin_inset Formula $^{(1)}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Date
+\begin_inset Formula $^{(1)}$
+\end_inset
+
 Department of Informatics and Telecommunications, University of Ioannina,
  47100 Arta, Greece
 \end_layout
 
 \begin_layout Abstract
-Write some abstract here
+A new stochastic method for locating the global minimum of a multidimensional
+ function inside a rectangular hyperbox is presented.
+ A sampling technique is employed that makes use of the procedure known
+ as grammatical evolution.
+ This method can be considered as a 
+\begin_inset Quotes eld
+\end_inset
+
+genetic
+\begin_inset Quotes erd
+\end_inset
+
+ modification to the controlled random search procedure due to Price.
+ We offer a comparison of the new method with others of similar structure,
+ by presenting results of computational experiments on a set of test functions.
 \end_layout
 
 \begin_layout Section
@@ -99,6 +147,292 @@ Introduction
 
 \begin_layout Section
 Method description 
+\end_layout
+
+\begin_layout Subsection
+Controlled random search
+\end_layout
+
+\begin_layout Standard
+The Controlled Random Search is a population based optimization algorithm
+ and it has been applied successfully to many problems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-139"
+literal "true"
+
+\end_inset
+
+ and is the base of our new procedure that is described above:
+\end_layout
+
+\begin_layout Description
+Initialization Step:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Se
+\series default
+t the value for the parameter 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ A commonly used value for that is 
+\begin_inset Formula $N=25n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Set
+\series default
+ a small positive value for 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Create
+\series default
+ the set 
+\begin_inset Formula $T=\left\{ z_{1},z_{2},...,z_{N}\right\} $
+\end_inset
+
+, by randomly sampling 
+\begin_inset Formula $N$
+\end_inset
+
+ points from 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Min_Max Step:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Calculate
+\series default
+ the points 
+\begin_inset Formula $z_{\mbox{min}}=\mbox{argmin}f(z)$
+\end_inset
+
+ and 
+\begin_inset Formula $z_{\mbox{max}}=\mbox{argmax}f(z)$
+\end_inset
+
+ and their function values 
+\begin_inset Formula 
+\[
+f_{\mbox{max}}=\max_{z\in T}f(z)
+\]
+
+\end_inset
+
+ and 
+\begin_inset Formula 
+\[
+f_{\mbox{min}}=\min_{z\in T}f(z)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+If
+\series default
+ the proposed termination rule holds,
+\series bold
+ then
+\series default
+ 
+\series bold
+goto
+\series default
+ 
+\series bold
+Local_Search
+\series default
+ Step.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $\left|f_{\mbox{max}}-f_{\mbox{min}}\right|<\epsilon$
+\end_inset
+
+, 
+\series bold
+then
+\series default
+ 
+\series bold
+goto
+\series default
+ 
+\series bold
+Local_Search
+\series default
+ Step.
+\end_layout
+
+\begin_layout Description
+New_Point Step:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Select
+\series default
+ randomly the reduced set 
+\begin_inset Formula $\tilde{T}=\left\{ z_{T_{1}},z_{T_{2}},..,z_{T_{n+1}}\right\} $
+\end_inset
+
+ from 
+\begin_inset Formula $T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Compute
+\series default
+ the centroid 
+\begin_inset Formula $G$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Compute
+\series default
+ a trial point 
+\begin_inset Formula $\tilde{z}=2G-z_{T_{n+1}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+If
+\series default
+ 
+\begin_inset Formula $\tilde{z}\ \notin S$
+\end_inset
+
+ 
+\series bold
+or
+\series default
+ 
+\begin_inset Formula $f(\tilde{z})\ge f_{\mbox{max}}$
+\end_inset
+
+ 
+\series bold
+then
+\series default
+ goto New_Point step.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Perform
+\series default
+ a call to GRS procedure using as starting point the point 
+\begin_inset Formula $\tilde{z}$
+\end_inset
+
+.
+ This is the step that distinguishes the new method from the controlled
+ random search 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-112"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Update Step:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $T=T\ \cup\{\tilde{z}\}-\left\{ z_{\mbox{max}}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Goto Min_Max
+\series default
+ Step.
+\end_layout
+
+\begin_layout Description
+Local_Search Step:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $z^{*}=\mbox{localSearch}(z)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Return the point 
+\begin_inset Formula $z^{*}$
+\end_inset
+
+ as the discovered global minimum.
 \end_layout
 
 \begin_layout Subsection
@@ -2591,6 +2925,41 @@ G15
 
 \begin_layout Section
 Conclusions
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-112"
+literal "true"
+
+\end_inset
+
+Price W.
+ L., Global Optimization by Controlled Random Search, Computer Journal, Vol.
+ 20, pp.
+ 367-370, 1977.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-139"
+literal "true"
+
+\end_inset
+
+Ali M.
+ M., Storey C.
+ and T
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset
+
+rn A., Application of some stochastic global optimization algorithms to practical
+ problems, Journal of Optimization Theory and Applications, Vol.
+ 95, No.
+ 3, pp.
+ 545-563, 1997.
 \end_layout
 
 \begin_layout Bibliography

@@ -68,7 +68,7 @@ bool	GenPrice::check()
 void GenPrice::Solve()
 {
 	bool newprice=false;
-	bool usegrs=true;
+	bool usegrs=false;
 	int dimension = problem->getDimension();
 	Collection *sample2 = new Collection(dimension);
 	vector<int> index;
@@ -199,6 +199,7 @@ step2:
 	}
 
 step3:
+	if(!newprice) goto step2;
 	if (fk > fmax)
 	{
 		if (success * 1.0 / iters > 0.5)
@@ -213,7 +214,6 @@ step3:
 			if (!problem->isPointIn(xk))
 				goto step2;
 			fk = problem->funmin(xk);
-	if(newprice)
 	fk=tolmin(xk,Info,10);	
 			success += (fk <= fmax);
 			if (fk < fmax)
