@@ -33,9 +33,6 @@ GenPrice::GenPrice(Problem *p)
 	center.resize(problem->getDimension());
 }
 
-	double x1 = 0.0, x2 = 0.0, stopat = 0.0, variance=0.0, oldBesty = 1e+100;
-	int iters;
-	int miters=0;
 bool	GenPrice::check()
 {
 
@@ -65,12 +62,100 @@ bool	GenPrice::check()
 	return false;
 }
 
+void GenPrice::makeSample2()
+{
+	int dimension = problem->getDimension();
+	Data x;
+	x.resize(dimension);
+	double y;
+	vector<int> index;
+	index.resize(dimension + 1);
+	for (int i = 0; i < dimension + 1; i++)
+		index[i] = -1;
+	sample2->clear();
+	for (int i = 0; i < dimension + 1; i++)
+	{
+		int r, flag;
+		do
+		{
+			r = rand() % M;
+			flag = 0;
+			for (int j = 0; j < i; j++)
+			{
+				if (index[j] == r)
+				{
+					flag = 1;
+					break;
+				}
+			}
+		} while (flag);
+		index[i] = r;
+		sample->getSampleX(r, x);
+		y = sample->getSampleY(r);
+		sample2->addSample(x, y);
+	}
+}
+
+Data	GenPrice::getNewPoint()
+{
+	bool useFirstCenter=false; //original algorithm
+	bool useMinCenter=false; //proposed by Ali
+	bool useSimpleCenter=true; //proposed by Charilogis
+	int dimension = problem->getDimension();
+	Data xk;
+	xk.resize(dimension);
+	Data x;
+	x.resize(dimension);
+	for(int i=0;i<dimension;i++) center[i]=0.0;
+	if(useFirstCenter)
+	{
+		for(int i=0;i<dimension;i++)
+		{
+			sample2->getSampleX(i,x);
+			for (int j = 0; j < dimension; j++)
+				center[j] = center[j] + 1.0 / dimension * x[j];
+		}
+		sample2->getSampleX(dimension, x);
+		for (int i = 0; i < dimension; i++)
+			xk[i] = 2.0 * center[i] - x[i];
+	}
+	else
+	if(useMinCenter)
+	{	
+		for(int i=1;i<dimension;i++)
+		{
+			sample2->getSampleX(i,x);
+			for (int j = 0; j < dimension; j++)
+				center[j] = center[j] + 1.0 / dimension * x[j];
+			for(int j=0;j<dimension;j++)
+				center[j]+=xmin[j]/dimension;
+		}
+		sample2->getSampleX(dimension, x);
+		for (int i = 0; i < dimension; i++)
+			xk[i] = 2.0 * center[i] - x[i];
+	}
+	else
+	if(useSimpleCenter)
+	{
+		for(int i=0;i<dimension;i++)
+		{
+			sample2->getSampleX(i,x);
+			for (int j = 0; j < dimension; j++)
+				center[j] = center[j] + 1.0 / dimension * x[j];
+		}
+		sample2->getSampleX(dimension, x);
+		for (int i = 0; i < dimension; i++)
+			xk[i] = center[i] - x[i];
+	}
+	return xk;
+}
+
 void GenPrice::Solve()
 {
 	bool newprice=false;
-	bool usegrs=true;
+	bool usegrs=false;
 	int dimension = problem->getDimension();
-	Collection *sample2 = new Collection(dimension);
+	sample2 = new Collection(dimension);
 	vector<int> index;
 	index.resize(dimension + 1);
 	Data xk;
@@ -85,6 +170,14 @@ void GenPrice::Solve()
 	/**/
 	double oldymin = -1e+100;
 	int run_flag = 0;
+	x1=0;
+	x2=0;
+	miters=0;
+	oldBesty=1e+100;
+	iters=0;
+	stopat=0;
+	variance=0;
+	int repeatedFailure=0;
 	/*
 	 * */
 		MinInfo Info;
@@ -151,41 +244,17 @@ step1:
 	
 	
 	
+	repeatedFailure=0;
 step2:
-	sample2->clear();
-	for (int i = 0; i < dimension; i++)
-		center[i] = 0.0;
-	for (int i = 0; i < dimension + 1; i++)
-		index[i] = -1;
-	for (int i = 0; i < dimension + 1; i++)
-	{
-		int r, flag;
-		do
-		{
-			r = rand() % M;
-			flag = 0;
-			for (int j = 0; j < i; j++)
-			{
-				if (index[j] == r)
-				{
-					flag = 1;
-					break;
-				}
-			}
-		} while (flag);
-		index[i] = r;
-		sample->getSampleX(r, x);
-		y = sample->getSampleY(r);
-		sample2->addSample(x, y);
-		if (i != dimension)
-			for (int j = 0; j < dimension; j++)
-				center[j] = center[j] + 1.0 / dimension * x[j];
-	}
-	sample2->getSampleX(dimension, x);
-	for (int i = 0; i < dimension; i++)
-		xk[i] = 2.0 * center[i] - x[i];
+	makeSample2();
+	xk=getNewPoint();
 	if (!problem->isPointIn(xk))
+	{
+		repeatedFailure++;
+		if(repeatedFailure>=5) xk = xmax;
+		else
 		goto step2;
+	}
 	fk = problem->funmin(xk);
 	if(usegrs)
 	Solver->Solve(xk,fk);
@@ -198,6 +267,7 @@ step2:
 	}
 
 step3:
+	goto step2;
 	if(!newprice ) goto step2;
 	if (fk > fmax)
 	{

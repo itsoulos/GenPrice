@@ -14,8 +14,14 @@ class GenPrice
 		double fmax,fmin;
 		int M;
 		Collection *sample;
+		Collection *sample2;
+		double x1, x2, stopat, variance, oldBesty;
+		int iters;
+		int miters;
 	public:
 		GenPrice(Problem *p);
+		void   makeSample2();
+		Data getNewPoint();
 		void	Solve();
 		void	getMinimum(Data &x,double &y);
 		int	getM() const;
