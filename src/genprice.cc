@@ -5,6 +5,7 @@
 #include <get_options_price.h>
 
 vector<double> minima;
+int changeFlag = 0;
 
 double getMean(vector<double> &x)
 {
@@ -112,7 +113,7 @@ Data	GenPrice::getNewPoint()
 	Data x;
 	x.resize(dimension);
 	for(int i=0;i<dimension;i++) center[i]=0.0;
-	if(useFirstCenter)
+	if(useFirstCenter || changeFlag)
 	{
 		for(int i=0;i<dimension;i++)
 		{
@@ -163,6 +164,7 @@ void GenPrice::Solve()
 {
 	bool newprice=false;
 	bool usegrs=false;
+	changeFlag=0;
 	int dimension = problem->getDimension();
 	sample2 = new Collection(dimension);
 	vector<int> index;
@@ -264,7 +266,8 @@ step2:
 	{
 		countFail++;
 		repeatedFailure++;
-		if(repeatedFailure>=5) xk = xmax;
+		changeFlag = !changeFlag;
+		if(repeatedFailure>=5) xk = xmin;
 		else
 		goto step2;
 	}

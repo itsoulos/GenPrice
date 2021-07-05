@@ -2266,7 +2266,7 @@ BF1
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.09%
+0.10%
 \end_layout
 
 \end_inset
@@ -2295,7 +2295,7 @@ BF2
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.09%
+0.10%
 \end_layout
 
 \end_inset
@@ -2382,7 +2382,7 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-6.56%
+6.39%
 \end_layout
 
 \end_inset
@@ -2391,7 +2391,7 @@ EASOM
 \begin_inset Text
 
 \begin_layout Plain Layout
-635
+626
 \end_layout
 
 \end_inset
@@ -2507,7 +2507,7 @@ EXP16
 \begin_inset Text
 
 \begin_layout Plain Layout
-14564
+15464
 \end_layout
 
 \end_inset
@@ -3049,7 +3049,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.38%
 \end_layout
 
 \end_inset
@@ -3058,7 +3058,7 @@ RASTRIGIN
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+945
 \end_layout
 
 \end_inset
@@ -3078,7 +3078,7 @@ ROSENBROCK
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3087,7 +3087,7 @@ ROSENBROCK
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+46327
 \end_layout
 
 \end_inset
@@ -3107,7 +3107,7 @@ SHEKEL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3116,7 +3116,7 @@ SHEKEL5
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2535
 \end_layout
 
 \end_inset
@@ -3136,7 +3136,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3145,7 +3145,7 @@ SHEKEL7
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2487
 \end_layout
 
 \end_inset
@@ -3165,7 +3165,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3174,7 +3174,7 @@ SHEKEL10
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2503
 \end_layout
 
 \end_inset
@@ -3194,7 +3194,7 @@ SINU4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3203,7 +3203,7 @@ SINU4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+1972
 \end_layout
 
 \end_inset
@@ -3223,7 +3223,7 @@ SINU8
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3232,7 +3232,7 @@ SINU8
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+8947
 \end_layout
 
 \end_inset
@@ -3252,7 +3252,7 @@ SINU16
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3261,7 +3261,7 @@ SINU16
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+31589
 \end_layout
 
 \end_inset
@@ -3281,7 +3281,7 @@ SINU32
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3290,7 +3290,7 @@ SINU32
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+91328
 \end_layout
 
 \end_inset
@@ -3310,7 +3310,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3319,7 +3319,7 @@ TEST2N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2755
 \end_layout
 
 \end_inset
@@ -3339,7 +3339,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.01%
 \end_layout
 
 \end_inset
@@ -3348,7 +3348,7 @@ TEST2N5
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+4690
 \end_layout
 
 \end_inset
@@ -3368,7 +3368,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3377,7 +3377,7 @@ TEST2N6
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+6917
 \end_layout
 
 \end_inset
@@ -3397,7 +3397,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.00%
 \end_layout
 
 \end_inset
@@ -3406,7 +3406,7 @@ TEST2N7
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+9733
 \end_layout
 
 \end_inset
@@ -3426,7 +3426,7 @@ TEST30N3
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.21%
 \end_layout
 
 \end_inset
@@ -3435,7 +3435,7 @@ TEST30N3
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+1506
 \end_layout
 
 \end_inset
@@ -3455,7 +3455,7 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+0.03%
 \end_layout
 
 \end_inset
@@ -3464,7 +3464,7 @@ TEST30N4
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+2679
 \end_layout
 
 \end_inset
