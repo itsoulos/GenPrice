@@ -2,7 +2,7 @@
 
 extern "C"
 {
-# define DIMENSION	5	
+# define DIMENSION	5
 # define MINIMA		50
 
 static int min_div(int N)

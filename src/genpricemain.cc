@@ -111,6 +111,7 @@ int main(int argc, char **argv)
 			printf(" %lf ",x[i]);	
 		}
 		printf(" %lf \n",y);
+		printf("FAIL     PERCENT = %.2lf\n",opt.getFailPercent());
 	}
 	delete[] tempx;
 	delete[] tempg;

@@ -18,6 +18,8 @@ class GenPrice
 		double x1, x2, stopat, variance, oldBesty;
 		int iters;
 		int miters;
+		int countEnter;
+		int countFail;
 	public:
 		GenPrice(Problem *p);
 		void   makeSample2();
@@ -27,6 +29,7 @@ class GenPrice
 		int	getM() const;
 		void	setM(int m);
 		bool    check();
+		double	getFailPercent() const;
 		~GenPrice();
 };
 # endif

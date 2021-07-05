@@ -62,6 +62,11 @@ bool	GenPrice::check()
 	return false;
 }
 
+double	GenPrice::getFailPercent() const
+{
+	return countFail * 100.0/countEnter;
+}
+
 void GenPrice::makeSample2()
 {
 	int dimension = problem->getDimension();
@@ -137,15 +142,19 @@ Data	GenPrice::getNewPoint()
 	else
 	if(useSimpleCenter)
 	{
-		for(int i=0;i<dimension;i++)
+
+		for (int i = 0; i < dimension; i++)
 		{
-			sample2->getSampleX(i,x);
+			sample2->getSampleX(i, x);
+			//if (i != dimension)
 			for (int j = 0; j < dimension; j++)
-				center[j] = center[j] + 1.0 / dimension * x[j];
+				center[j] += x[j] * (1.0 / dimension);
 		}
+		for (int j = 0; j < dimension; j++)
+			center[j] += xmin[j] * 1.0 / dimension;
 		sample2->getSampleX(dimension, x);
 		for (int i = 0; i < dimension; i++)
-			xk[i] = center[i] - x[i];
+			xk[i] = center[i] - (x[i] / dimension);
 	}
 	return xk;
 }
@@ -167,6 +176,8 @@ void GenPrice::Solve()
 	Grs *Solver = new Grs(problem);
 	Solver->setGenomeCount(genome_count);
 	Solver->setGenomeLength(10 * problem->getDimension());
+	countFail=0;
+	countEnter=0;
 	/**/
 	double oldymin = -1e+100;
 	int run_flag = 0;
@@ -248,8 +259,10 @@ step1:
 step2:
 	makeSample2();
 	xk=getNewPoint();
+	countEnter++;
 	if (!problem->isPointIn(xk))
 	{
+		countFail++;
 		repeatedFailure++;
 		if(repeatedFailure>=5) xk = xmax;
 		else

@@ -6,3 +6,4 @@ do
 	./$1 -r $x >> $1.out
 done
 cat $1.out | grep FUNCTION | awk '{print $4}' | awk -v N=1 '{ sum += $N } END { if (NR > 0) print sum / NR }'
+cat $1.out | grep PERCENT | awk '{print $4}' | awk -v N=1 '{ sum += $N } END { if (NR > 0) print sum / NR }'
