@@ -9,18 +9,19 @@ int changeFlag = 0;
 
 double getMean(vector<double> &x)
 {
-	double s=0.0;
-	for(int i=0;i<x.size();i++) s+=x[i];
-	return s/x.size();
+	double s = 0.0;
+	for (int i = 0; i < x.size(); i++)
+		s += x[i];
+	return s / x.size();
 }
 
 double getVariance(vector<double> &x)
 {
-	double m= getMean(x);
-	double s=0.0;
-	for(int i=0;i<x.size();i++)
-		s+=pow(x[i]-m,2.0);
-	return s/x.size();
+	double m = getMean(x);
+	double s = 0.0;
+	for (int i = 0; i < x.size(); i++)
+		s += pow(x[i] - m, 2.0);
+	return s / x.size();
 }
 
 GenPrice::GenPrice(Problem *p)
@@ -34,17 +35,18 @@ GenPrice::GenPrice(Problem *p)
 	center.resize(problem->getDimension());
 }
 
-bool	GenPrice::check()
+bool GenPrice::check()
 {
 
-	double fm = (fmin<oldBesty)>1e-4;//fabs(1.0 + fabs(fmin));
+	double fm = (fmin < oldBesty) > 1e-4; //fabs(1.0 + fabs(fmin));
 
 	x1 = x1 + fm;
 	x2 = x2 + fm * fm;
-	variance = x2 / (miters+1 ) - (x1 / (miters +1)) * (x1 / (miters+1 ));
+	variance = x2 / (miters + 1) - (x1 / (miters + 1)) * (x1 / (miters + 1));
 	variance = fabs(variance);
 	miters++;
-	if(variance<1e-8 &&miters<3) variance=x1/miters;
+	if (variance < 1e-8 && miters < 3)
+		variance = x1 / miters;
 	if (fmin < oldBesty)
 	{
 		oldBesty = fmin;
@@ -63,28 +65,47 @@ bool	GenPrice::check()
 	return false;
 }
 
-double	GenPrice::getFailPercent() const
+double GenPrice::getFailPercent() const
 {
-	return countFail * 100.0/countEnter;
+	return countFail * 100.0 / countEnter;
+}
+int GenPrice::getTournamentElement(Collection *s, int tsize)
+{
+	int imax = -1;
+	double maxx = -1e+100;
+	for (int i = 0; i < tsize; i++)
+	{
+		int r = rand() % s->getSize();
+		if (s->getSampleY(r) > maxx)
+		{
+			imax = r;
+			maxx = s->getSampleY(r);
+		}
+	}
+	return imax;
 }
 
 void GenPrice::makeSample2()
 {
+
 	int dimension = problem->getDimension();
+	Collection *tmp = new Collection(dimension);
+	vector<int> index;
+	index.resize(dimension + 1);
 	Data x;
 	x.resize(dimension);
 	double y;
-	vector<int> index;
-	index.resize(dimension + 1);
-	for (int i = 0; i < dimension + 1; i++)
-		index[i] = -1;
+	int tournament_size = 8;
+	int atoms = 4;
+	int k;
 	sample2->clear();
+	int r;
 	for (int i = 0; i < dimension + 1; i++)
 	{
 		int r, flag;
 		do
 		{
-			r = rand() % M;
+			r = rand() % sample->getSize();//getTournamentElement(sample, tournament_size);
 			flag = 0;
 			for (int j = 0; j < i; j++)
 			{
@@ -96,28 +117,36 @@ void GenPrice::makeSample2()
 			}
 		} while (flag);
 		index[i] = r;
+
+		//r = getTournamentElement(sample, tournament_size);
 		sample->getSampleX(r, x);
 		y = sample->getSampleY(r);
 		sample2->addSample(x, y);
 	}
 }
 
-Data	GenPrice::getNewPoint()
+Data GenPrice::getNewPoint()
 {
-	bool useFirstCenter=false; //original algorithm
-	bool useMinCenter=false; //proposed by Ali
-	bool useSimpleCenter=true; //proposed by Charilogis
+	bool useFirstCenter =false; //original algorithm
+	bool useMinCenter = false;	 //proposed by Ali
+	bool useSimpleCenter = true; //proposed by Charilogis
 	int dimension = problem->getDimension();
 	Data xk;
 	xk.resize(dimension);
 	Data x;
 	x.resize(dimension);
-	for(int i=0;i<dimension;i++) center[i]=0.0;
-	if(useFirstCenter || changeFlag)
+
+	for (int i = 0; i < dimension; i++)
 	{
-		for(int i=0;i<dimension;i++)
+
+		center[i] = 0.0;
+	}
+	//if(useFirstCenter || changeFlag)
+	if (useFirstCenter)
+	{
+		for (int i = 0; i < dimension; i++)
 		{
-			sample2->getSampleX(i,x);
+			sample2->getSampleX(i, x);
 			for (int j = 0; j < dimension; j++)
 				center[j] = center[j] + 1.0 / dimension * x[j];
 		}
@@ -125,46 +154,44 @@ Data	GenPrice::getNewPoint()
 		for (int i = 0; i < dimension; i++)
 			xk[i] = 2.0 * center[i] - x[i];
 	}
-	else
-	if(useMinCenter)
-	{	
-		for(int i=1;i<dimension;i++)
+	else if (useMinCenter)
+	{
+		for (int i = 1; i < dimension; i++)
 		{
-			sample2->getSampleX(i,x);
+			sample2->getSampleX(i, x);
 			for (int j = 0; j < dimension; j++)
 				center[j] = center[j] + 1.0 / dimension * x[j];
-			for(int j=0;j<dimension;j++)
-				center[j]+=xmin[j]/dimension;
+			for (int j = 0; j < dimension; j++)
+				center[j] += xmin[j] / dimension;
 		}
 		sample2->getSampleX(dimension, x);
 		for (int i = 0; i < dimension; i++)
 			xk[i] = 2.0 * center[i] - x[i];
 	}
-	else
-	if(useSimpleCenter)
+	else if (useSimpleCenter)
 	{
 
 		for (int i = 0; i < dimension; i++)
 		{
 			sample2->getSampleX(i, x);
-			//if (i != dimension)
 			for (int j = 0; j < dimension; j++)
 				center[j] += x[j] * (1.0 / dimension);
 		}
 		for (int j = 0; j < dimension; j++)
-			center[j] += xmin[j] * 1.0 / dimension;
+			center[j] += xmin[j] / dimension;
 		sample2->getSampleX(dimension, x);
 		for (int i = 0; i < dimension; i++)
 			xk[i] = center[i] - (x[i] / dimension);
 	}
+
 	return xk;
 }
 
 void GenPrice::Solve()
 {
-	bool newprice=false;
-	bool usegrs=false;
-	changeFlag=0;
+	bool newprice = true;
+	bool usegrs = false;
+	changeFlag = 0;
 	int dimension = problem->getDimension();
 	sample2 = new Collection(dimension);
 	vector<int> index;
@@ -178,23 +205,23 @@ void GenPrice::Solve()
 	Grs *Solver = new Grs(problem);
 	Solver->setGenomeCount(genome_count);
 	Solver->setGenomeLength(10 * problem->getDimension());
-	countFail=0;
-	countEnter=0;
+	countFail = 0;
+	countEnter = 0;
 	/**/
 	double oldymin = -1e+100;
 	int run_flag = 0;
-	x1=0;
-	x2=0;
-	miters=0;
-	oldBesty=1e+100;
-	iters=0;
-	stopat=0;
-	variance=0;
-	int repeatedFailure=0;
+	x1 = 0;
+	x2 = 0;
+	miters = 0;
+	oldBesty = 1e+100;
+	iters = 0;
+	stopat = 0;
+	variance = 0;
+	int repeatedFailure = 0;
 	/*
 	 * */
-		MinInfo Info;
-		Info.p=problem;
+	MinInfo Info;
+	Info.p = problem;
 step0:
 	iters = 1;
 	Data x;
@@ -225,16 +252,16 @@ step1:
 			sample->getSampleX(i, xmax);
 		}
 	}
-	if(newprice)
-{
-	if(check()) 
+	if (newprice)
+	{
+		if (check())
 		{
 
-		delete Solver;
-		delete sample2;
+			delete Solver;
+			delete sample2;
 			return;
 		}
-}
+	}
 	if (iters >= 100000)
 	{
 		delete Solver;
@@ -245,35 +272,38 @@ step1:
 		delete sample2;
 		return;
 	}
-//		printf("iters=%d fmin=%.10lg diff=%.10lg\n",iters,fmin,fabs(fmax-fmin));
-	if(fabs(fmax-fmin)<1e-6)
+	//		printf("iters=%d fmin=%.10lg diff=%.10lg\n",iters,fmin,fabs(fmax-fmin));
+	if (fabs(fmax - fmin) < 1e-6)
 	{
 		delete Solver;
-		double f= problem->funmin(xmin);
-		fmin=tolmin(xmin,Info);
+		double f = problem->funmin(xmin);
+		fmin = tolmin(xmin, Info);
 		delete sample2;
 		return;
 	}
-	
-	
-	
-	repeatedFailure=0;
+
+	repeatedFailure = 0;
 step2:
 	makeSample2();
-	xk=getNewPoint();
+	xk = getNewPoint();
 	countEnter++;
 	if (!problem->isPointIn(xk))
 	{
 		countFail++;
 		repeatedFailure++;
 		changeFlag = !changeFlag;
-		if(repeatedFailure>=5) xk = xmin;
+		if (repeatedFailure >= 5)
+			xk = xmax;
 		else
-		goto step2;
+			goto step2;
 	}
 	fk = problem->funmin(xk);
-	if(usegrs)
-	Solver->Solve(xk,fk);
+	if (usegrs)
+		Solver->Solve(xk, fk);
+	if (newprice)
+	{
+		fk = tolmin(xk, Info, 10);
+	}
 	success += (fk <= fmax);
 	if (fk <= fmax)
 	{
@@ -284,7 +314,8 @@ step2:
 
 step3:
 	goto step2;
-	if(!newprice ) goto step2;
+	if (!newprice)
+		goto step2;
 	if (fk > fmax)
 	{
 		if (success * 1.0 / iters > 0.5)
@@ -299,7 +330,7 @@ step3:
 			if (!problem->isPointIn(xk))
 				goto step2;
 			fk = problem->funmin(xk);
-	fk=tolmin(xk,Info,10);	
+			fk = tolmin(xk, Info, 10);
 			success += (fk <= fmax);
 			if (fk < fmax)
 			{

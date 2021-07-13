@@ -1283,7 +1283,7 @@ return error_code;
 } /* GKLS_D2_hessian() */
 
 
-# define MY_GKLS_DIMENSION		3
+# define MY_GKLS_DIMENSION		2
 # define MY_GKLS_MINIMA			50
 
 int	getdimension()
