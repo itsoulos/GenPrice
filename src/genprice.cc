@@ -292,9 +292,9 @@ step2:
 		countFail++;
 		repeatedFailure++;
 		changeFlag = !changeFlag;
-		if (repeatedFailure >= 5)
-			xk = xmax;
-		else
+	//	if (repeatedFailure >= 5)
+	//		xk = xmax;
+	//	else
 			goto step2;
 	}
 	fk = problem->funmin(xk);
