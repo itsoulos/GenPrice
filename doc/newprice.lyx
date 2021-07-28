@@ -93,7 +93,11 @@ Vasileios Charilogis
 \begin_inset Formula $^{(1)}$
 \end_inset
 
-,Nikolaos Anastasopoulos
+
+\begin_inset Newline newline
+\end_inset
+
+Nikolaos Anastasopoulos
 \begin_inset Formula $^{(2)}$
 \end_inset
 
@@ -123,6 +127,222 @@ Write some abstract here
 
 \begin_layout Section
 Introduction 
+\end_layout
+
+\begin_layout Standard
+Global optimization
+\begin_inset CommandInset citation
+LatexCommand cite
+key "GO1"
+literal "false"
+
+\end_inset
+
+ is considered a problem of high complexity with many applications.
+ The problem is defined as the location of the global minimum of a multi
+ - dimensional function 
+\begin_inset Formula $f(x)$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+x^{*}=\mbox{arg}\min_{x\in S}f(x)\label{eq:eq1}
+\end{equation}
+
+\end_inset
+
+Where 
+\begin_inset Formula $S\subset R^{n}$
+\end_inset
+
+ is formulated as: 
+\begin_inset Formula 
+\begin{equation}
+S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]\label{eq:eq2}
+\end{equation}
+
+\end_inset
+
+ This problem is applicable in a wide range of areas such as physics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "physics1,physics2"
+literal "false"
+
+\end_inset
+
+, chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "chemistry1,chemistry2"
+literal "false"
+
+\end_inset
+
+, medicine 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "med1,med2"
+literal "false"
+
+\end_inset
+
+, economics
+\begin_inset CommandInset citation
+LatexCommand cite
+key "econ1"
+literal "false"
+
+\end_inset
+
+ etc.
+ In modern theory there are two different categories of methods of global
+ optimization, the stochastic methods and the deterministic methods.
+ The first category contains the vast majority of methods such as Simulated
+ Annealing methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "simann_major,simann1,simann2"
+literal "false"
+
+\end_inset
+
+, Genetic Algorithms 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ga1,ga2,ga3"
+literal "false"
+
+\end_inset
+
+, Tabu Search methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tabu1"
+literal "false"
+
+\end_inset
+
+, Particle Swarm Optimization 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pso_major,pso1,pso2"
+literal "false"
+
+\end_inset
+
+ etc.
+ A method that also belongs to stochastic methods is the Controlled Random
+ Search (CRS) method 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs1"
+literal "false"
+
+\end_inset
+
+, which is a population based algorithm.
+ This method initially creates a set with randomly selected points and repeatedl
+y replaces the worst point in that set with a randomly generated point and
+ this process can continue to converge.
+ The CRS method has been used intensively in many problems such as geophysics
+ problems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_geophysics,crs_geophysics2"
+literal "false"
+
+\end_inset
+
+, optimal shape design problems 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_optimalshape1"
+literal "false"
+
+\end_inset
+
+, the animal diet problem 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_animaldiet1"
+literal "false"
+
+\end_inset
+
+, the heat transfer problem 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_heat1"
+literal "false"
+
+\end_inset
+
+ etc.
+ 
+\end_layout
+
+\begin_layout Standard
+This CRS method has been thoroughly analyzed by many researchers in the
+ field such as the work A of Ali and Storey where two new variants of the
+ CRS method are proposed 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_modif0"
+literal "false"
+
+\end_inset
+
+.
+ These variants have proposed alternative techniques for the selection of
+ the initial sample set and usage of local search methods.
+ Also, Pillo 
+\emph on
+et al
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_modif1"
+literal "false"
+
+\end_inset
+
+ suggested a hybrid CRS method where the base algorithm is combined with
+ a Newton - type unconstrained minimization algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_newton"
+literal "false"
+
+\end_inset
+
+ to encance the efficiency of the method in various test problems.
+ Another work is of Kaelo and Ali , in which they suggested 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_modif2"
+literal "false"
+
+\end_inset
+
+ some modifications on the method and especially in the new point generation
+ step.
+ Also, Filho and Albuquerque have suggested 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "crs_modif3"
+literal "false"
+
+\end_inset
+
+ the usage of a distribution strategy to accelerate the Controlled Random
+ Search method.
+\end_layout
+
+\begin_layout Standard
+The rest of this article is organized as follows:.....
 \end_layout
 
 \begin_layout Section
@@ -510,33 +730,6 @@ The global minimum has the value of
 \end_inset
 
 
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-DiffPower
-\series default
- function.
- The Sum of Different Powers function is defined 
-\begin_inset Formula 
-\[
-f(x)=\sum_{i=1}^{n}\left|x_{i}\right|^{i+1}
-\]
-
-\end_inset
-
-and the global minimum is is 
-\begin_inset Formula $f\left(x^{*}\right)=0$
-\end_inset
-
-.
- The value 
-\begin_inset Formula $n=10$
-\end_inset
-
- was used in the conducted experiments and the associated function is denoted
- as Diffpower10.
 \end_layout
 
 \begin_layout Itemize
@@ -2988,6 +3181,530 @@ TOTAL
 
 \begin_layout Section
 Conclusions
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "GO1"
+literal "false"
+
+\end_inset
+
+T
+\begin_inset Formula $\ddot{\mbox{o}}$
+\end_inset
+
+rn A.
+ and 
+\begin_inset Formula $\check{\mbox{Z}}$
+\end_inset
+
+ilinskas A., Global Optimization Volume 350 of Lecture Notes in Computer
+ Science, Springer, Heidelberg, 1987.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "physics1"
+literal "true"
+
+\end_inset
+
+Patrice Ogou Yapo, Hoshin Vijai Gupta, Soroosh Sorooshian, Multi-objective
+ global optimization for hydrologic models, Journal of Hydrology 204, pp.
+ 83-97, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "physics2"
+literal "true"
+
+\end_inset
+
+Q.
+ Duan, S.
+ Sorooshian, V.
+ Gupta, Effective and efficient global optimization for conceptual rainfall-runo
+ff models, Water Resources Research 
+\series bold
+28
+\series default
+, pp.
+ 1015-1031 , 1992.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "med1"
+literal "false"
+
+\end_inset
+
+Balsa-Canto E., Banga J.R., Egea J.A., Fernandez-Villaverde A., de Hijas-Liste
+ G.M.
+ (2012) Global Optimization in Systems Biology: Stochastic Methods and Their
+ Applications.
+ In: Goryanin I., Goryachev A.
+ (eds) Advances in Systems Biology.
+ Advances in Experimental Medicine and Biology, vol 736.
+ Springer, New York, NY.
+ https://doi.org/10.1007/978-1-4419-7210-1_24
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "med2"
+literal "false"
+
+\end_inset
+
+P.
+ Boutros, A.
+ Ewing, K.
+ Ellrott et al., Global optimization of somatic variant identification in
+ cancer genomes with a global community challenge, Nat Genet 
+\series bold
+46
+\series default
+, pp.
+ 318–319, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "chemistry1"
+literal "true"
+
+\end_inset
+
+David J.
+ Wales, Harold A.
+ Scheraga, Global Optimization of Clusters, Crystals, and Biomolecules,
+ Science 
+\series bold
+27
+\series default
+, pp.
+ 1368-1372, 1999.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "chemistry2"
+literal "true"
+
+\end_inset
+
+P.M.
+ Pardalos, D.
+ Shalloway, G.
+ Xue, Optimization methods for computing global minima of nonconvex potential
+ energy functions, Journal of Global Optimization 
+\series bold
+4
+\series default
+, pp.
+ 117-133, 1994.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "econ1"
+literal "true"
+
+\end_inset
+
+Zwe-Lee Gaing, Particle swarm optimization to solving the economic dispatch
+ considering the generator constraints, IEEE Transactions on 
+\series bold
+18
+\series default
+ Power Systems, pp.
+ 1187-1195, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "simann_major"
+literal "false"
+
+\end_inset
+
+S.
+ Kirkpatrick, CD Gelatt, , MP Vecchi, Optimization by simulated annealing,
+ Science 
+\series bold
+220
+\series default
+, pp.
+ 671-680, 1983.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "simann1"
+literal "true"
+
+\end_inset
+
+L.
+ Ingber, Very fast simulated re-annealing, Mathematical and Computer Modelling
+ 
+\series bold
+12
+\series default
+, pp.
+ 967-973, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "simann2"
+literal "true"
+
+\end_inset
+
+R.W.
+ Eglese, Simulated annealing: A tool for operational research, Simulated
+ annealing: A tool for operational research 
+\series bold
+46
+\series default
+, pp.
+ 271-281, 1990.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga1"
+literal "true"
+
+\end_inset
+
+D.
+ Goldberg, Genetic Algorithms in Search, Optimization and Machine Learning,
+ Addison-Wesley Publishing Company, Reading, Massachussets, 1989.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga2"
+literal "true"
+
+\end_inset
+
+Z.
+ Michaelewicz, Genetic Algorithms + Data Structures = Evolution Programs.
+ Springer - Verlag, Berlin, 1996.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ga3"
+literal "true"
+
+\end_inset
+
+S.A.
+ Grady, M.Y.
+ Hussaini, M.M.
+ Abdullah, Placement of wind turbines using genetic algorithms, Renewable
+ Energy 
+\series bold
+30
+\series default
+, pp.
+ 259-270, 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "tabu1"
+literal "false"
+
+\end_inset
+
+A.
+ Duarte, R.
+ Martí, F.
+ Glover et al., Hybrid scatter tabu search for unconstrained global optimization,
+ Ann Oper Res 
+\series bold
+183
+\series default
+, pp.
+ 95–123m, 2011.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso_major"
+literal "false"
+
+\end_inset
+
+J.
+ Kennedy and R.
+ Eberhart, "Particle swarm optimization," Proceedings of ICNN'95 - International
+ Conference on Neural Networks, 1995, pp.
+ 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso1"
+literal "true"
+
+\end_inset
+
+Riccardo Poli, James Kennedy kennedy, Tim Blackwell, Particle swarm optimization
+ An Overview, Swarm Intelligence 
+\series bold
+1
+\series default
+, pp 33-57, 2007.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "pso2"
+literal "true"
+
+\end_inset
+
+Ioan Cristian Trelea, The particle swarm optimization algorithm: convergence
+ analysis and parameter selection, Information Processing Letters 
+\series bold
+85
+\series default
+, pp.
+ 317-325, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs1"
+literal "true"
+
+\end_inset
+
+W.L.
+ Price, Global Optimization by Controlled Random Search, Computer Journal
+ 
+\series bold
+ 20
+\series default
+, pp.
+ 367-370, 1977.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_geophysics"
+literal "false"
+
+\end_inset
+
+David N.
+ Smith and John F.
+ Ferguson, Constrained inversion of seismic refraction data using the controlled
+ random search, Geophysics 
+\series bold
+65
+\series default
+,pp.
+ 1622-1630, 200.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_geophysics2"
+literal "false"
+
+\end_inset
+
+Cassiano Antonio Bortolozo, Jorge Luís Porsani, Fernando Acácio Monteiro
+ dos Santos, Emerson Rodrigo Almeida, VES/TEM 1D joint inversion by using
+ Controlled Random Search (CRS) algorithm, Journal of Applied Geophysics
+ 
+\series bold
+112
+\series default
+, pp.
+ 157-174, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_optimalshape1"
+literal "false"
+
+\end_inset
+
+J.
+ Haslinger, D.
+ Jedelský, T.
+ Kozubek et al, Genetic and Random Search Methods in Optimal Shape Design
+ Problems, Journal of Global Optimization 
+\series bold
+16
+\series default
+, pp.
+ 109–131, 2000.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_animaldiet1"
+literal "false"
+
+\end_inset
+
+Radha Gupta, Manasa Chandan, Use of “Controlled Random Search Technique
+ for Global Optimization” in Animal Diet Problem, International Journal
+ of Emerging Technology and Advanced Engineering 
+\series bold
+3
+\series default
+, pp.
+ 284-287, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_heat1"
+literal "false"
+
+\end_inset
+
+R.C.
+ Mehta, S.B.
+ Tiwari, Controlled random search technique for estimation of convective
+ heat transfer coefficient, Heat Mass Transfer 
+\series bold
+43
+\series default
+, pp.1171–1177, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_modif0"
+literal "false"
+
+\end_inset
+
+M.M.
+ Ali, C.
+ Storey, Modified Controlled Random Search Algorithms, International Journal
+ of Computer Mathematics 
+\series bold
+53
+\series default
+, pp.
+ 229-235, 1994.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_modif1"
+literal "false"
+
+\end_inset
+
+Di Pillo G., Lucidi S., Palagi L., Roma M.
+ (1998) A Controlled Random Search Algorithm with Local Newton-type Search
+ for Global Optimization.
+ In: De Leone R., Murli A., Pardalos P.M., Toraldo G.
+ (eds) High Performance Algorithms and Software in Nonlinear Optimization.
+ Applied Optimization, vol 24.
+ Springer, Boston, MA.
+ https://doi.org/10.1007/978-1-4613-3279-4_10
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_newton"
+literal "false"
+
+\end_inset
+
+S.
+ Lucidi, F.
+ Rochetich, and M.
+ Roma, Curvilinear stabilization techniques for truncated Newton methods
+ in large scale unconstrained optimization, SIAM Journal on Optimization
+ 
+\series bold
+8
+\series default
+, pp.
+ 916–939, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_modif2"
+literal "false"
+
+\end_inset
+
+P.
+ Kaelo, M.M.
+ Ali, Some Variants of the Controlled Random Search Algorithm for Global
+ Optimization, Journal of Optimization Theory and Applications 
+\series bold
+130
+\series default
+, pp.
+ 253–264, 2006.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "crs_modif3"
+literal "false"
+
+\end_inset
+
+Nelson Manzanares-filho , Rodrigo B.
+ F.
+ Albuquerque, Accelerating Controlled Random Search Algorithms Using a Distribut
+ion Strategy, In: EngOpt 2008 - International Conference on Engineering
+ Optimization, Rio de Janeiro, Brazil, 01 - 05 June 2008.
+ 
 \end_layout
 
 \begin_layout Bibliography
