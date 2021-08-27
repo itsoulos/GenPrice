@@ -122,6 +122,8 @@ Department of Electrical and Computer Engineering, University of Patras,
 \end_layout
 
 \begin_layout Abstract
+
+\series bold
 Write some abstract here
 \end_layout
 
@@ -197,8 +199,8 @@ literal "false"
 \end_inset
 
  etc.
- In modern theory there are two different categories of methods of global
- optimization, the stochastic methods and the deterministic methods.
+ In modern theory there are two different categories of global optimization
+ methods, the stochastic methods and the deterministic methods.
  The first category contains the vast majority of methods such as Simulated
  Annealing methods 
 \begin_inset CommandInset citation
@@ -233,8 +235,8 @@ literal "false"
 \end_inset
 
  etc.
- A method that also belongs to stochastic methods is the Controlled Random
- Search (CRS) method 
+ A common method that also belongs to stochastic methods is the Controlled
+ Random Search (CRS) method 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "crs1"
@@ -245,7 +247,7 @@ literal "false"
 , which is a population based algorithm.
  This method initially creates a set with randomly selected points and repeatedl
 y replaces the worst point in that set with a randomly generated point and
- this process can continue to converge.
+ this process can continue until some convergence criterion is met.
  The CRS method has been used intensively in many problems such as geophysics
  problems 
 \begin_inset CommandInset citation
@@ -339,34 +341,78 @@ literal "false"
 
  the usage of a distribution strategy to accelerate the Controlled Random
  Search method.
+ The current work proposed three major modifications in the CRS method:
+ a new point replacement strategy, a stochastic termination rule and the
+ a periodical application of some local search method.
+ The first modification is used to better explore the domain range of the
+ function.
+ The second modification is made in order to achieve a better termination
+ of the method without wasting valuable computational time.
+ The third modification is used in order to speed up the method by applying
+ a small amount of steps of a local search method.
 \end_layout
 
 \begin_layout Standard
-The rest of this article is organized as follows:.....
+The rest of this article is organized as follows:
+\series bold
+ 
+\series default
+in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Method-Description"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the major steps of the CRS method as well as the proposed modifications
+ are outlined, in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Experiments"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ the results from the application of the proposed method on a series of
+ test functions are provided and finally in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusions"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ some conclusions are presented.
 \end_layout
 
 \begin_layout Section
 Method Description 
-\end_layout
-
-\begin_layout Standard
-The Controlled Random Search is a population based optimization algorithm
- and it has been applied successfully to many problems 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "key-139"
-literal "true"
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Method-Description"
 
 \end_inset
 
- and is the base of our new procedure that is described above:
+
+\end_layout
+
+\begin_layout Standard
+The Controlled Random Search a series of steps that are described bellow.
+ 
 \end_layout
 
 \begin_layout Description
 Initialization Step:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Se
@@ -383,7 +429,7 @@ t the value for the parameter
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Set
@@ -395,7 +441,7 @@ Set
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Create
@@ -419,7 +465,7 @@ Create
 Min_Max Step:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Calculate
@@ -451,7 +497,7 @@ f_{\mbox{min}}=\min_{z\in T}f(z)
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 If
@@ -479,7 +525,7 @@ Local_Search
 New_Point Step:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Select
@@ -495,7 +541,7 @@ Select
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Compute
@@ -515,7 +561,7 @@ G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Compute
@@ -527,7 +573,7 @@ Compute
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 If
@@ -555,14 +601,14 @@ then
 Update Step:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 \begin_inset Formula $T=T\ \cup\{\tilde{z}\}-\left\{ z_{\mbox{max}}\right\} $
 \end_inset
 
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 
 \series bold
 Goto Min_Max
@@ -574,14 +620,14 @@ Goto Min_Max
 Local_Search Step:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 \begin_inset Formula $z^{*}=\mbox{localSearch}(z)$
 \end_inset
 
 .
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 Return the point 
 \begin_inset Formula $z^{*}$
 \end_inset
@@ -589,8 +635,155 @@ Return the point
  as the discovered global minimum.
 \end_layout
 
+\begin_layout Subsection
+A new method for trial points
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:A-new-method"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Compute
+\series default
+ the centroid 
+\begin_inset Formula $G$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Set 
+\begin_inset Formula $G=G+\frac{1}{n}x_{\mbox{min}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Compute
+\series default
+ a trial point 
+\begin_inset Formula $\tilde{z}=G-\frac{1}{n}z_{T_{n+1}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+A new stopping rule 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:A-new-stopping"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+A common way to terminate a global optimization procedure is to use the
+ maximum number of allowed iterations, i.e.
+ stop when 
+\begin_inset Formula $\mbox{iter}\ge K$
+\end_inset
+
+.
+ Although, it is a simple criterion but is not an efficient one since, if
+ 
+\begin_inset Formula $K$
+\end_inset
+
+ is tool small, then the algorithm will terminate without locating the global
+ optimum.
+ Also, when 
+\begin_inset Formula $K$
+\end_inset
+
+ is too high, the optimization algorithm will spend computation time in
+ unnecessary function calls.
+ The termination rule used here is derived from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "psotsoulos"
+literal "true"
+
+\end_inset
+
+: denote with 
+\begin_inset Formula $\sigma^{(k)}$
+\end_inset
+
+ the variance of 
+\begin_inset Formula $f\left(x^{*}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $k$
+\end_inset
+
+ is iteration number and 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+ is the so far located global minimum.
+ If the algorithm did not manage to locate new minimum for a number of generatio
+ns, then probably the algorithm has located the global minimum and it should
+ terminate.
+ The termination rule stops the algorithm when 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset Formula 
+\begin{equation}
+k\ge k_{\mbox{min}}\ \mbox{AND\ }\sigma^{(k)}\le\frac{\sigma^{\left(k_{\mbox{last}}\right)}}{2}\label{eq:termination_mine}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $k_{\mbox{last}}$
+\end_inset
+
+ stands for the iteration where a new minimum was lastly found.
+ The value 
+\begin_inset Formula $k_{\mbox{min}}$
+\end_inset
+
+ is a predefined minimum number of iterations used to prevent the algorithm
+ from premature termination.
+ 
+\end_layout
+
 \begin_layout Section
 Experiments 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Experiments"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -608,10 +801,7 @@ literal "true"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Subsection*
-Unconstrained optimization functions
+ The following functions were used: 
 \end_layout
 
 \begin_layout Itemize
@@ -1354,6 +1544,13 @@ status open
 
 \begin_layout Plain Layout
 Experimenting with rejection rates.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Experimenting-with-rejection"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3177,10 +3374,63 @@ TOTAL
 \end_inset
 
 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Statistical comparison for the function calls using box plots.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Statistical-comparison-for"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename values.eps
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
-Conclusions
+Conclusions 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
@@ -3705,6 +3955,24 @@ Nelson Manzanares-filho , Rodrigo B.
 ion Strategy, In: EngOpt 2008 - International Conference on Engineering
  Optimization, Rio de Janeiro, Brazil, 01 - 05 June 2008.
  
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "psotsoulos"
+literal "true"
+
+\end_inset
+
+Ioannis G.
+ Tsoulos, Modifications of real code genetic algorithm for global optimization,
+ Applied Mathematics and Computation 
+\series bold
+203
+\series default
+, pp.
+ 598-607, 2008.
 \end_layout
 
 \begin_layout Bibliography
