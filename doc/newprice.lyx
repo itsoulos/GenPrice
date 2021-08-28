@@ -320,7 +320,7 @@ literal "false"
 
 \end_inset
 
- to encance the efficiency of the method in various test problems.
+ to enhance the efficiency of the method in various test problems.
  Another work is of Kaelo and Ali , in which they suggested 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -404,7 +404,7 @@ name "sec:Method-Description"
 \end_layout
 
 \begin_layout Standard
-The Controlled Random Search a series of steps that are described bellow.
+The Controlled Random Search has a series of steps that are described bellow.
  
 \end_layout
 
@@ -595,6 +595,7 @@ or
 then
 \series default
  goto New_Point step.
+ 
 \end_layout
 
 \begin_layout Description
@@ -668,7 +669,7 @@ G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
 
 \begin_layout Enumerate
 Set 
-\begin_inset Formula $G=G+\frac{1}{n}x_{\mbox{min}}$
+\begin_inset Formula $G=G+\frac{1}{n}z_{\mbox{min}}$
 \end_inset
 
 
@@ -698,29 +699,16 @@ name "subsec:A-new-stopping"
 \end_layout
 
 \begin_layout Standard
+It is quite common in the optimization techniques to use a predefined number
+ of maximum iterations as the stopping rule of the method.
+ Even though this termination rule is easy to implement sometime could require
+ an excessive number of functions calls before termination and a more sophistica
+ted termination rule is needed.
 
 \series bold
-A common way to terminate a global optimization procedure is to use the
- maximum number of allowed iterations, i.e.
- stop when 
-\begin_inset Formula $\mbox{iter}\ge K$
-\end_inset
-
-.
- Although, it is a simple criterion but is not an efficient one since, if
  
-\begin_inset Formula $K$
-\end_inset
-
- is tool small, then the algorithm will terminate without locating the global
- optimum.
- Also, when 
-\begin_inset Formula $K$
-\end_inset
-
- is too high, the optimization algorithm will spend computation time in
- unnecessary function calls.
- The termination rule used here is derived from 
+\series default
+The termination rule proposed here is inspired from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "psotsoulos"
@@ -728,27 +716,32 @@ literal "true"
 
 \end_inset
 
-: denote with 
-\begin_inset Formula $\sigma^{(k)}$
-\end_inset
-
- the variance of 
-\begin_inset Formula $f\left(x^{*}\right)$
-\end_inset
-
-, where 
+.
+ At every iteration 
 \begin_inset Formula $k$
 \end_inset
 
- is iteration number and 
-\begin_inset Formula $x^{*}$
+ the variance
+\series bold
+ 
+\begin_inset Formula $\sigma^{(k)}$
 \end_inset
 
- is the so far located global minimum.
- If the algorithm did not manage to locate new minimum for a number of generatio
-ns, then probably the algorithm has located the global minimum and it should
- terminate.
- The termination rule stops the algorithm when 
+ 
+\series default
+of the quantity 
+\begin_inset Formula $f_{\mbox{min}}$
+\end_inset
+
+ is calculated.
+ If the optimization technique did not manage to find a new estimation of
+ the global minimum for some iterations, then it is highly possible that
+ the global minimum is already located and hence the algorithm should terminate.
+
+\series bold
+ 
+\series default
+The termination rule is defined as follows, terminate when 
 \end_layout
 
 \begin_layout Standard
@@ -756,22 +749,22 @@ ns, then probably the algorithm has located the global minimum and it should
 \series bold
 \begin_inset Formula 
 \begin{equation}
-k\ge k_{\mbox{min}}\ \mbox{AND\ }\sigma^{(k)}\le\frac{\sigma^{\left(k_{\mbox{last}}\right)}}{2}\label{eq:termination_mine}
+\sigma^{(k)}\le\frac{\sigma^{\left(k_{\mbox{last}}\right)}}{2}\label{eq:termination_mine}
 \end{equation}
 
 \end_inset
 
-where 
+
+\series default
+The term
+\series bold
+ 
 \begin_inset Formula $k_{\mbox{last}}$
 \end_inset
 
- stands for the iteration where a new minimum was lastly found.
- The value 
-\begin_inset Formula $k_{\mbox{min}}$
-\end_inset
-
- is a predefined minimum number of iterations used to prevent the algorithm
- from premature termination.
+ 
+\series default
+represents the last iteration where a new global minimum was located.
  
 \end_layout
 
@@ -791,8 +784,8 @@ Test functions
 \end_layout
 
 \begin_layout Standard
-In order to measure the effectiveness of the proposed approach we utilize
- several benchmark functions from the relevant literature 
+The modified version of the CRS was tested against the traditional CRS on
+ series of benchmark functions from the relevant literature 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Ali1,Floudas1"
@@ -1534,10 +1527,80 @@ Results
 \end_layout
 
 \begin_layout Standard
+In the experiments two different values were measured: the rejection rate
+ in the
+\series bold
+ New_Point
+\series default
+ step and the average number of function calls required.
+ In the first case we measure the percentage of points rejected during the
+\series bold
+ New_Point
+\series default
+ step, i.e.
+ points created that are outsidethe domain range of the function.
+ All the experiments were conducted 30 times and different seed for the
+ random number generator was used each time.
+ The local search method that used in the experiments and denoted as localsearch
+(x), was a BFGS variant due to Powell
+\begin_inset CommandInset citation
+LatexCommand cite
+key "powell"
+literal "false"
+
+\end_inset
+
+.
+ The experimental results are listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Experimenting-with-rejection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The column FUNCTION stands for the name of the objective function, the
+ column CRS-R represents the rejection rate
+\series bold
+ 
+\series default
+for the CRS method while the column NEWCRS-R represents the same measure
+ for the proposed method.
+ Similar, the column CRS-C represents the average function calls for the
+ CRS method and the column NEWCRS-C stands for the average function calls
+ of the proposed method.
+ Also a statistical comparison between the CRS and the proposed method is
+ shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Statistical-comparison-for"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The proposed method almost annihilates the rejection rate in every test
+ function.
+ This is an evidence that the new mechanism proposed here to create new
+ point is more accurate than the traditional one.
+ Also, the proposed method requires lower number of function calls than
+ the CRS method as one can deduce from the relevant columns and teh statistical
+ comparison.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3380,14 +3443,10 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Statistical comparison for the function calls using box plots.
+Statistical comparison for the function calls using boxplots.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Statistical-comparison-for"
@@ -4046,6 +4105,24 @@ M.
 \series default
 , pp.
  469-480, 2003.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "powell"
+literal "true"
+
+\end_inset
+
+M.J.D Powell, A Tolerant Algorithm for Linearly Constrained Optimization Calculati
+ons, Mathematical Programming 
+\series bold
+45
+\series default
+, pp.
+ 547-566, 1989.
+ 
 \end_layout
 
 \end_body
