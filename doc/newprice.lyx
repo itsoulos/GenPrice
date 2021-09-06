@@ -404,8 +404,99 @@ name "sec:Method-Description"
 \end_layout
 
 \begin_layout Standard
-The Controlled Random Search has a series of steps that are described bellow.
+The Controlled Random Search has a series of steps that are described in
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:The-Controlled-Random"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The changes proposed by the new method focus on three points:
+\end_layout
+
+\begin_layout Enumerate
+Τhe creation of a test point (
+\series bold
+New_Point
+\series default
+ step) is performed with a new technique described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:A-new-method"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+In the 
+\series bold
+Min_Max
+\series default
+ step the stochastic termination rule described in subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:A-new-stopping"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is used.
+ The aim of this rule is to terminate the method when, with some certainty,
+ no lower minimums are to be found.
  
+\end_layout
+
+\begin_layout Enumerate
+Apply a few steps of a local search procedure after 
+\series bold
+New_Point
+\series default
+ step in the 
+\begin_inset Formula $\tilde{z}$
+\end_inset
+
+ point.
+ This procedure is used to bring the test points closer to the corresponding
+ minimums.
+ This speeds up the process of searching for new minima, although it obviously
+ leads to an increase in function calls 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+The Controlled Random Search algorithm.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:The-Controlled-Random"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -636,6 +727,11 @@ Return the point
  as the discovered global minimum.
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 A new method for trial points
 \begin_inset CommandInset label
@@ -645,6 +741,16 @@ name "subsec:A-new-method"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+According to the proposed algorithm, the calculation of the test point x[k]
+ doesn't contain product with great / high prices as in the basic algorithm,
+ so that the test point isn't too far from the centroid.
+ This technique, avoids vector jumps by making termination conditions (limits
+ of min-max) to respond consistently.
 \end_layout
 
 \begin_layout Enumerate
@@ -3490,6 +3596,25 @@ name "sec:Conclusions"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Three important modifications were proposed in the current work for the
+ CRS method.
+ The first modification has to do with the new test point generation process,
+ which seems to be more accurate than the original one.
+ The new method almost every time creates points that are within the domain
+ range of the function.
+ The second change adds a new termination rule based on stochastic observations.
+ The third proposed modification applies a few steps of a local search procedure
+ to every trial point created by the algorithm.
+ Judging by the results, it seems that the proposed changes have two important
+ effects.
+ The first is that the success of the algorithm in creating valid test points
+ is significantly improved.
+ The second is the large reduction in the number of function calls required
+ to find the global minimum.
+ 
 \end_layout
 
 \begin_layout Bibliography
