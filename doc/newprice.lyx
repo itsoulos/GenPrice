@@ -122,9 +122,15 @@ Department of Electrical and Computer Engineering, University of Patras,
 \end_layout
 
 \begin_layout Abstract
-
-\series bold
-Write some abstract here
+A modified version of common global optimization method named Controlled
+ Random Search is presented here.
+ The method aims to locate the global minimum of multidimensional functions
+ inside a rectangular hyperbox.
+ The new method modifies the original algorithm by incorporating a new sampling
+ method, a new termination rule and the periodical application of local
+ search optimization algorithm to the points sampled.
+ The new version is compared against the original one on a series of test
+ functions from the relevant literature and the results are reported.
 \end_layout
 
 \begin_layout Section
@@ -200,8 +206,8 @@ literal "false"
 
  etc.
  In modern theory there are two different categories of global optimization
- methods, the stochastic methods and the deterministic methods.
- The first category contains the vast majority of methods such as Simulated
+ methods: the stochastic methods and the deterministic methods.
+  The first category contains the vast majority of methods such as Simulated
  Annealing methods 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -342,8 +348,8 @@ literal "false"
  the usage of a distribution strategy to accelerate the Controlled Random
  Search method.
  The current work proposed three major modifications in the CRS method:
- a new point replacement strategy, a stochastic termination rule and the
- a periodical application of some local search method.
+ a new point replacement strategy, a stochastic termination rule and a periodica
+l application of some local search method.
  The first modification is used to better explore the domain range of the
  function.
  The second modification is made in order to achieve a better termination
@@ -744,13 +750,58 @@ name "subsec:A-new-method"
 \end_layout
 
 \begin_layout Standard
+The proposed technique to compute the trial point 
+\begin_inset Formula $\tilde{z}$
+\end_inset
 
-\series bold
-According to the proposed algorithm, the calculation of the test point x[k]
- doesn't contain product with great / high prices as in the basic algorithm,
- so that the test point isn't too far from the centroid.
- This technique, avoids vector jumps by making termination conditions (limits
- of min-max) to respond consistently.
+ is shown in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:newpoint"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ According to this, the calculation of the test point 
+\begin_inset Formula $\tilde{z}$
+\end_inset
+
+ does not contain product with high values as in the basic algorithm, so
+ that the test point is not too far from the centroid.
+ This technique avoids vector jumps from the centroid, where it has great
+ gravity in the calculation for starting the local optimization.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Proposed method to compute the trial point.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:newpoint"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -791,6 +842,11 @@ Compute
 \end_inset
 
 .
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -925,7 +981,7 @@ with
 \end_inset
 
 .
- The value of global minimum is 0.0.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -947,7 +1003,7 @@ with
 \end_inset
 
 .
- The value of the global minimum is 0.0.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -970,7 +1026,7 @@ Branin
 \end_inset
 
 .
- The value of global minimum is -0.352386.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -1014,10 +1070,6 @@ f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{
 
 \end_inset
 
-The global minimum has the value of 
-\begin_inset Formula $f\left(x^{*}\right)=-1.0316$
-\end_inset
-
 
 \end_layout
 
@@ -1039,7 +1091,7 @@ with
 \begin_inset Formula $x\in[-100,100]^{2}.$
 \end_inset
 
- The value of the global minimum is -1.0
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -1200,7 +1252,7 @@ Guilin Hills
 \end_inset
 
  so that the number of minima was 50.
- The produced functions are entititled GUILIN550 and GUILIN1050 in the result
+ The produced functions are entitled GUILIN550 and GUILIN1050 in the result
  tables.
 \end_layout
 
@@ -1267,7 +1319,7 @@ p=\left(\begin{array}{ccc}
 
 \end_inset
 
-The value of global minimum is -3.862782.
+
 \end_layout
 
 \begin_layout Itemize
@@ -1314,7 +1366,7 @@ p=\left(\begin{array}{cccccc}
 
 \end_inset
 
-the value of global minimum is -3.322368.
+
 \end_layout
 
 \begin_layout Itemize
@@ -1331,11 +1383,7 @@ f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}
 
 \end_inset
 
-The global minimum is located at 
-\begin_inset Formula $x^{*}=(0,0)$
-\end_inset
 
- with value -2.0.
 \end_layout
 
 \begin_layout Itemize
@@ -1419,7 +1467,7 @@ with
 \end_inset
 
 .
- The value of global minimum is -10.342378.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -1463,7 +1511,6 @@ with
 \end_inset
 
 .
- The value of global minimum is -10.107749.
 \end_layout
 
 \begin_layout Itemize
@@ -1517,7 +1564,7 @@ with
 \end_inset
 
 .
- The value of global minimum is -10.536410.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -1644,7 +1691,7 @@ In the experiments two different values were measured: the rejection rate
  New_Point
 \series default
  step, i.e.
- points created that are outsidethe domain range of the function.
+ points created that are outside the domain range of the function.
  All the experiments were conducted 30 times and different seed for the
  random number generator was used each time.
  The local search method that used in the experiments and denoted as localsearch
@@ -1698,7 +1745,7 @@ The proposed method almost annihilates the rejection rate in every test
  This is an evidence that the new mechanism proposed here to create new
  point is more accurate than the traditional one.
  Also, the proposed method requires lower number of function calls than
- the CRS method as one can deduce from the relevant columns and teh statistical
+ the CRS method as one can deduce from the relevant columns and the statistical
  comparison.
 \end_layout
 
@@ -1706,7 +1753,7 @@ The proposed method almost annihilates the rejection rate in every test
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -3552,7 +3599,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Statistical comparison for the function calls using boxplots.
+Statistical comparison for the function calls using box plots.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:Statistical-comparison-for"
