@@ -126,11 +126,20 @@ A modified version of common global optimization method named Controlled
  Random Search is presented here.
  The method aims to locate the global minimum of multidimensional functions
  inside a rectangular hyperbox.
- The new method modifies the original algorithm by incorporating a new sampling
- method, a new termination rule and the periodical application of local
- search optimization algorithm to the points sampled.
+ A series of problems in science and engineering can be modeled as a function
+ applied on a variety of variables.
+ The optimum setup of such as physical problem is considered the global
+ optimum of the corresponding function.
+ Such problems usually found in physics, biology or even the solution of
+ differential equations can be considered as global optimization problem.
+ The proposed computational method modifies the original algorithm by incorporat
+ing a new sampling method, a new termination rule and the periodical application
+ of local search optimization algorithm to the points sampled.
  The new version is compared against the original one on a series of test
- functions from the relevant literature and the results are reported.
+ functions from the relevant literature and the results are reported
+\series bold
+.
+ 
 \end_layout
 
 \begin_layout Section
@@ -176,6 +185,22 @@ S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n
 \begin_inset CommandInset citation
 LatexCommand cite
 key "physics1,physics2"
+literal "false"
+
+\end_inset
+
+, biology 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_biol1,go_biol2"
+literal "false"
+
+\end_inset
+
+, solution of differential equations 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "go_de1,go_de2"
 literal "false"
 
 \end_inset
@@ -3716,6 +3741,75 @@ ff models, Water Resources Research
 \series default
 , pp.
  1015-1031 , 1992.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_biol1"
+literal "false"
+
+\end_inset
+
+P.
+ Bertolazzi, G.
+ Liuzzi and C.
+ Guerra, A global optimization algorithm for protein surface alignment,
+ 2009 IEEE International Conference on Bioinformatics and Biomedicine Workshop,
+ 2009, pp.
+ 93-100.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_biol2"
+literal "false"
+
+\end_inset
+
+Joanne M.
+ Carr and David J.
+ Wales, Global optimization and folding pathways of selected α -helical
+ proteins, J.
+ Chem.
+ Phys.
+ 
+\series bold
+123
+\series default
+, 2005.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_de1"
+literal "false"
+
+\end_inset
+
+Chachuat B., Latifi M.A.
+ (2004) A New Approach in Deterministic Global Optimisation of Problems
+ with Ordinary Differential Equations.
+ In: Floudas C.A., Pardalos P.
+ (eds) Frontiers in Global Optimization.
+ Nonconvex Optimization and Its Applications, vol 74.
+ Springer, Boston, MA.
+ https://doi.org/10.1007/978-1-4613-0251-3_5
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "go_de2"
+literal "false"
+
+\end_inset
+
+Efim A.Galperin, Quan Zheng, Solution and control of PDE via global optimization
+ methods, Computers & Mathematics with Applications 25, pp.
+ 103-118, 1993.
 \end_layout
 
 \begin_layout Bibliography

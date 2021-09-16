@@ -38,11 +38,17 @@ of Patras, Greece }
 A modified version of common global optimization method named Controlled
 Random Search is presented here. The method aims to locate the global
 minimum of multidimensional functions inside a rectangular hyperbox.
-The new method modifies the original algorithm by incorporating a
-new sampling method, a new termination rule and the periodical application
-of local search optimization algorithm to the points sampled. The
-new version is compared against the original one on a series of test
-functions from the relevant literature and the results are reported.
+A series of problems in science and engineering can be modeled as
+a function applied on a variety of variables. The optimum setup of
+such as physical problem is considered the global optimum of the corresponding
+function. Such problems usually found in physics, biology or even
+the solution of differential equations can be considered as global
+optimization problem. The proposed computational method modifies the
+original algorithm by incorporating a new sampling method, a new termination
+rule and the periodical application of local search optimization algorithm
+to the points sampled. The new version is compared against the original
+one on a series of test functions from the relevant literature and
+the results are reported\textbf{. }
 \end{abstract}
 
 \section{Introduction }
@@ -58,7 +64,8 @@ Where $S\subset R^{n}$ is formulated as:
 S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]\label{eq:eq2}
 \end{equation}
  This problem is applicable in a wide range of areas such as physics
-\cite{physics1,physics2}, chemistry \cite{chemistry1,chemistry2},
+\cite{physics1,physics2}, biology \cite{go_biol1,go_biol2}, solution
+of differential equations \cite{go_de1,go_de2}, chemistry \cite{chemistry1,chemistry2},
 medicine \cite{med1,med2}, economics\cite{econ1} etc. In modern
 theory there are two different categories of global optimization methods:
 the stochastic methods and the deterministic methods.  The first category
@@ -616,6 +623,24 @@ Journal of Hydrology 204, pp. 83-97, 1998.
 \bibitem{physics2}Q. Duan, S. Sorooshian, V. Gupta, Effective and
 efficient global optimization for conceptual rainfall-runoff models,
 Water Resources Research \textbf{28}, pp. 1015-1031 , 1992.
+
+\bibitem{go_biol1}P. Bertolazzi, G. Liuzzi and C. Guerra, A global
+optimization algorithm for protein surface alignment, 2009 IEEE International
+Conference on Bioinformatics and Biomedicine Workshop, 2009, pp. 93-100.
+
+\bibitem{go_biol2}Joanne M. Carr and David J. Wales, Global optimization
+and folding pathways of selected \textgreek{a} -helical proteins,
+J. Chem. Phys. \textbf{123}, 2005.
+
+\bibitem{go_de1}Chachuat B., Latifi M.A. (2004) A New Approach in
+Deterministic Global Optimisation of Problems with Ordinary Differential
+Equations. In: Floudas C.A., Pardalos P. (eds) Frontiers in Global
+Optimization. Nonconvex Optimization and Its Applications, vol 74.
+Springer, Boston, MA. https://doi.org/10.1007/978-1-4613-0251-3\_5
+
+\bibitem{go_de2}Efim A.Galperin, Quan Zheng, Solution and control
+of PDE via global optimization methods, Computers \& Mathematics with
+Applications 25, pp. 103-118, 1993.
 
 \bibitem{med1}Balsa-Canto E., Banga J.R., Egea J.A., Fernandez-Villaverde
 A., de Hijas-Liste G.M. (2012) Global Optimization in Systems Biology:
