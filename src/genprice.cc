@@ -189,7 +189,7 @@ Data GenPrice::getNewPoint()
 
 void GenPrice::Solve()
 {
-	bool newprice = true;
+	bool newprice = true; 
 	bool usegrs = false;
 	changeFlag = 0;
 	int dimension = problem->getDimension();

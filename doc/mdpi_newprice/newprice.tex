@@ -1,49 +1,65 @@
-%% LyX 2.3.6 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[english]{article}
-\usepackage[LGR,T1]{fontenc}
-\usepackage[latin9]{inputenc}
-\usepackage{float}
-\usepackage{graphicx}
+\documentclass[symmetry,article,submit,moreauthors,pdftex]{Definitions/mdpi}
 
-\makeatletter
+%%\usepackage[LGR,T1]{fontenc}
+%%\usepackage[latin9]{inputenc}
+%%\usepackage{float}
+%%\usepackage{graphicx}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
-\DeclareRobustCommand{\greektext}{%
-  \fontencoding{LGR}\selectfont\def\encodingdefault{LGR}}
-\DeclareRobustCommand{\textgreek}[1]{\leavevmode{\greektext #1}}
-\ProvideTextCommand{\~}{LGR}[1]{\char126#1}
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+%\doinum{}
+\pubyear{2021}
+\copyrightyear{2020}
+%\externaleditor{Academic Editor: Firstname Lastname} % For journal Automation, please change Academic Editor to "Communicated by"
+\datereceived{} 
+\dateaccepted{} 
+\datepublished{} 
 
-%% Because html converters don't know tabularnewline
-\providecommand{\tabularnewline}{\\}
-\floatstyle{ruled}
+\hreflink{https://doi.org/} % If needed use \linebreak
+%---------------------------------------------------------
+
+\Title{An improved Controlled Random Search method}
+\TitleCitation{An improved Controlled Random Search method}
+\newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{} behind the author's name
+% Authors, for the paper (add full first names)
+\Author{Vasileios Charilogis $^{1}$, Ioannis Tsoulos $^{2}$* , Alexandros Tzallas $^{3}$,
+Nikolaos Anastasopoulos $^{4}$}
+\AuthorNames{Firstname Lastname, Firstname Lastname, Firstname Lastname and Firstname Lastname}
+\AuthorCitation{Charilogis, V.; Tsoulos, I.G.; Tzalas, A.; Anastasopoulos, N.}
+\address{%
+$^{1}$ \quad Department of Informatics and Telecommunications, University
+of Ioannina, 47100 Arta, Greece;  v.charilog@uoi.gr \\
+$^{2}$ \quad Department of Informatics and Telecommunications, University
+of Ioannina, 47100 Arta, Greece;  itsoulos@uoi.gr \\
+$^{3}$ \quad Department of Informatics and Telecommunications, University
+of Ioannina, 47100 Arta, Greece;  tzallas@uoi.gr \\
+$^{4}$ \quad Computer Engineering and Information Department, University
+of Patras, Greece; ece8268@upnet.gr}
+% Current address and/or shared authorship
+%%\firstnote{Current address: Affiliation 3} 
+%%\secondnote{These authors contributed equally to this work.}
+%%\usepackage{babel}
 \newfloat{algorithm}{tbp}{loa}
 \providecommand{\algorithmname}{Algorithm}
 \floatname{algorithm}{\protect\algorithmname}
 
-\makeatother
-
-\usepackage{babel}
-\begin{document}
-\title{An improved Controlled Random Search method}
-\author{Vasileios Charilogis$^{(1)}$, Ioannis G. Tsoulos$^{(1)}$, Alexandros
-Tzallas,$^{(1)}$\\
-Nikolaos Anastasopoulos$^{(2)}$}
-\date{$^{(1)}$Department of Informatics and Telecommunications, University
-of Ioannina, 47100 Arta, Greece \\
-$^{(2)}$Department of Electrical and Computer Engineering, University
-of Patras, Greece }
-\maketitle
-\begin{abstract}
+\abstract{
 A modified version of common global optimization method named Controlled
-Random Search is presented here. The method aims to locate the global
-minimum of multidimensional functions inside a rectangular hyperbox.
+Random Search is presented here. This method is designed to estimate the global
+minimum of multidimensional functions.
 The new method modifies the original algorithm by incorporating a
 new sampling method, a new termination rule and the periodical application
 of local search optimization algorithm to the points sampled. The
-new version is compared against the original one on a series of test
-functions from the relevant literature and the results are reported.
-\end{abstract}
+new version is compared against the original using some benchmark functions from the relevant litearature.
+}
+\begin{document}
+
+
 
 \section{Introduction }
 
@@ -57,7 +73,7 @@ Where $S\subset R^{n}$ is formulated as:
 \begin{equation}
 S=\left[a_{1},b_{1}\right]\otimes\left[a_{2},b_{2}\right]\otimes\ldots\left[a_{n},b_{n}\right]\label{eq:eq2}
 \end{equation}
- This problem is applicable in a wide range of areas such as physics
+ The location of the global optimum finds application in many  areas such as physics
 \cite{physics1,physics2}, chemistry \cite{chemistry1,chemistry2},
 medicine \cite{med1,med2}, economics\cite{econ1} etc. In modern
 theory there are two different categories of global optimization methods:
@@ -66,11 +82,9 @@ contains the vast majority of methods such as Simulated Annealing
 methods \cite{simann_major,simann1,simann2}, Genetic Algorithms \cite{ga1,ga2,ga3},
 Tabu Search methods \cite{tabu1}, Particle Swarm Optimization \cite{pso_major,pso1,pso2}
 etc. A common method that also belongs to stochastic methods is the
-Controlled Random Search (CRS) method \cite{crs1}, which is a population
-based algorithm. This method initially creates a set with randomly
+Controlled Random Search (CRS) method \cite{crs1}, which is a procedure that uses a population of trial solutions. This method initially creates a set with randomly
 selected points and repeatedly replaces the worst point in that set
-with a randomly generated point and this process can continue until
-some convergence criterion is met. The CRS method has been used intensively
+with a randomly generated point and this process can continue until some termination criterion is satisfied. The CRS method has been used intensively
 in many problems such as geophysics problems \cite{crs_geophysics,crs_geophysics2},
 optimal shape design problems \cite{crs_optimalshape1}, the animal
 diet problem \cite{crs_animaldiet1}, the heat transfer problem \cite{crs_heat1}
@@ -100,10 +114,10 @@ of steps of a local search method.
 
 The rest of this article is organized as follows:\textbf{ }in Section
 \ref{sec:Method-Description} the major steps of the CRS method as
-well as the proposed modifications are outlined, in section \ref{sec:Experiments}
+well as the proposed modifications are presented, in section \ref{sec:Experiments}
 the results from the application of the proposed method on a series
-of test functions are provided and finally in section \ref{sec:Conclusions}
-some conclusions are presented.
+of benchmark functions are listed and finally in section \ref{sec:Conclusions} 
+some conclusions and guidelines for future research are  presented.
 
 \section{Method Description \label{sec:Method-Description}}
 
@@ -111,8 +125,8 @@ The Controlled Random Search has a series of steps that are described
 in Algorithm \ref{alg:The-Controlled-Random}. The changes proposed
 by the new method focus on three points:
 \begin{enumerate}
-\item \textgreek{T}he creation of a test point (\textbf{New\_Point} step)
-is performed with a new technique described in subsection \ref{subsec:A-new-method}.
+\item The creation of a test point (\textbf{New\_Point} step)
+is performed using a new procedure  described in subsection \ref{subsec:A-new-method}.
 \item In the \textbf{Min\_Max} step the stochastic termination rule described
 in subsection \ref{subsec:A-new-stopping} is used. The aim of this
 rule is to terminate the method when, with some certainty, no lower
@@ -124,17 +138,15 @@ process of searching for new minima, although it obviously leads to
 an increase in function calls 
 \end{enumerate}
 \begin{algorithm}
-\caption{The Controlled Random Search algorithm.\label{alg:The-Controlled-Random}}
+\caption{The original Controlled Random search method. The basic steps of the method.\label{alg:The-Controlled-Random}}
 
 \begin{description}
 \item [{Initialization}] Step:
 \end{description}
 \begin{enumerate}
-\item \textbf{Se}t the value for the parameter $N$. A commonly used value
-for that is $N=25n$.
-\item \textbf{Set} a small positive value for $\epsilon$.
-\item \textbf{Create} the set $T=\left\{ z_{1},z_{2},...,z_{N}\right\} $,
-by randomly sampling $N$ points from $S$.
+\item \textbf{Set} the value for the parameter $N$. Typically this value could be set to  $N=25n$.
+\item \textbf{Set}  $\epsilon$ as a small positive value, used in comparisons.
+\item \textbf{Create} randomly  the set $T=\left\{ z_{1},z_{2},...,z_{N}\right\} $ from $S$.
 \end{enumerate}
 \begin{description}
 \item [{Min\_Max}] Step:
@@ -178,7 +190,7 @@ G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
 \end{description}
 \begin{enumerate}
 \item $z^{*}=\mbox{localSearch}(z)$.
-\item Return the point $z^{*}$ as the discovered global minimum.
+\item The final outcome of the algorithm is discovered global minimum $z^{*}$.
 \end{enumerate}
 \end{algorithm}
 
@@ -195,10 +207,10 @@ the local optimization.
 
 \begin{algorithm}
 
-\caption{Proposed method to compute the trial point.\label{alg:newpoint}}
+\caption{The steps of the new proposed method to create more efficient trial points for the Controlled Random Search method.\label{alg:newpoint}}
 
 \begin{enumerate}
-\item \textbf{Compute} the centroid $G$: 
+\item \textbf{Calculate} the centroid $G$: 
 \[
 G=\frac{1}{n}\sum_{i=1}^{n}z_{T_{i}}
 \]
@@ -218,9 +230,8 @@ sophisticated termination rule is needed.\textbf{ }The termination
 rule proposed here is inspired from \cite{psotsoulos}. At every iteration
 $k$ the variance\textbf{ $\sigma^{(k)}$ }of the quantity $f_{\mbox{min}}$
 is calculated. If the optimization technique did not manage to find
-a new estimation of the global minimum for some iterations, then it
-is highly possible that the global minimum is already located and
-hence the algorithm should terminate.\textbf{ }The termination rule
+a new estimation of the global minimum for some iterations, then probably the global minimum has been discovered and
+ the algorithm should terminate. The termination rule
 is defined as follows, terminate when 
 
 \textbf{
@@ -238,46 +249,42 @@ The modified version of the CRS was tested against the traditional
 CRS on series of benchmark functions from the relevant literature
 \cite{Ali1,Floudas1}. The following functions were used: 
 \begin{itemize}
-\item \textbf{Bf1} function. The function Bohachevsky 1 is given by the
-equation
+\item \textbf{Bf1} function defined as:
+
 \end{itemize}
 \[
 f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)-\frac{4}{10}\cos\left(4\pi x_{2}\right)+\frac{7}{10}
 \]
 with $x\in[-100,100]^{2}$. 
 \begin{itemize}
-\item \textbf{Bf2} function. The function Bohachevsky 2 is given by the
-equation 
+\item \textbf{Bf2} function:
 \[
 f(x)=x_{1}^{2}+2x_{2}^{2}-\frac{3}{10}\cos\left(3\pi x_{1}\right)\cos\left(4\pi x_{2}\right)+\frac{3}{10}
 \]
-with $x\in[-50,50]^{2}$. 
-\item \textbf{Branin} function. The function is defined by $f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$
-with $-5\le x_{1}\le10,\ 0\le x_{2}\le15$. The value of global minimum
-is 0.397887.with $x\in[-10,10]^{2}$. 
-\item \textbf{CM} function. The Cosine Mixture function is given by the
-equation 
+where $x\in[-50,50]^{2}$. 
+\item \textbf{Branin} function:
+$f(x)=\left(x_{2}-\frac{5.1}{4\pi^{2}}x_{1}^{2}+\frac{5}{\pi}x_{1}-6\right)^{2}+10\left(1-\frac{1}{8\pi}\right)\cos(x_{1})+10$
+with $-5\le x_{1}\le10,\ 0\le x_{2}\le15$.
+\item \textbf{CM - Cosine Mixture} function. 
 \[
 f(x)=\sum_{i=1}^{n}x_{i}^{2}-\frac{1}{10}\sum_{i=1}^{n}\cos\left(5\pi x_{i}\right)
 \]
-with $x\in[-1,1]^{n}$. The value of the global minimum is -0.4 and
-in our experiments we have used $n=4$.
-\item \textbf{Camel} function. The function is given by 
+with $x\in[-1,1]^{n}$. In our experiments we have used $n=4$.
+\item \textbf{Camel} function. 
 \[
 f(x)=4x_{1}^{2}-2.1x_{1}^{4}+\frac{1}{3}x_{1}^{6}+x_{1}x_{2}-4x_{2}^{2}+4x_{2}^{4},\quad x\in[-5,5]^{2}
 \]
-\item \textbf{Easom} function. The function is given by the equation 
+\item \textbf{Easom} function. 
 \[
 f(x)=-\cos\left(x_{1}\right)\cos\left(x_{2}\right)\exp\left(\left(x_{2}-\pi\right)^{2}-\left(x_{1}-\pi\right)^{2}\right)
 \]
 with $x\in[-100,100]^{2}.$ 
-\item \textbf{Exponential} function. The function is given by 
+\item \textbf{Exponential} function. 
 \[
 f(x)=-\exp\left(-0.5\sum_{i=1}^{n}x_{i}^{2}\right),\quad-1\le x_{i}\le1
 \]
-The global minimum is located at $x^{*}=(0,0,...,0)$ with value $-1$.
-In our experiments we used this function with $n=2,4,8,16,32,64,100$
-and the corresponding functions are denoted by the labels EXP2, EXP4,
+
+In the conducted experiments the values with $n=2,4,8,16,32,64,100$ were used and the corresponding functions was denoted as EXP2, EXP4,
 EXP8, EXP16, EXP32, EXP64, EXP100.
 \item \textbf{GoldStein \& Price }
 \end{itemize}
@@ -288,29 +295,22 @@ f(x) & = & [1+(x_{1}+x_{2}+1)^{2}\\
  &  & (18-32x_{1}+12x_{1}^{2}+48x_{2}-36x_{1}x_{2}+27x_{2}^{2})]
 \end{eqnarray*}
 
-The function has 4 local minima in the range $[-2,2]^{2}$ and global
-minimum $f^{*}=3.0$.
+
 \begin{itemize}
-\item \textbf{Griewank2} function. The function is given by
+\item \textbf{Griewank2} function. 
 \[
 f(x)=1+\frac{1}{200}\sum_{i=1}^{2}x_{i}^{2}-\prod_{i=1}^{2}\frac{\cos(x_{i})}{\sqrt{(i)}},\quad x\in[-100,100]^{2}
 \]
-The global minimum is located at the $x^{*}=(0,0,...,0)$ with value
-0.
+
 \item \textbf{Gkls} function. $f(x)=\mbox{Gkls}(x,n,w)$, is a function
-with $w$ local minima, described in \cite{gkls} with $x\in[-1,1]^{n}$
-and $n$ a positive integer between 2 and 100. The value of the global
-minimum is -1 and in our experiments we have used $n=2,3$ and $w=50$.
-The corresponding functions are denoted by the labels GKLS250 and
+with $w$ local minima, described in \cite{gkls} with $x\in[-1,1]^{n}$  In the conducted experiments we have used $n=2,3$ and $w=50$ and the functions are denoted by  the labels GKLS250 and
 GKLS350. 
 \item \textbf{Guilin Hills} function. $f(x)=3+\sum_{i=1}^{n}\left(c_{i}\frac{x_{i}+9}{x_{i}+10}\sin\left(\frac{\pi}{1-x_{i}+\frac{1}{2k_{i}}}\right)\right),\ x\in[0,1]^{n},\ c_{i}>0$
-and $k_{i}$ being positive integers. The function has $\prod_{i=1}^{n}k_{i}$
-local minima. In our experiments we have used $n=5,10$ and we set
-the values of $k_{i}$ so that the number of minima was 50. The produced
-functions are entitled GUILIN550 and GUILIN1050 in the result tables.
+and $k_{i}$ being positive integers.  In our experiments we have used $n=5,10$ with 50 local minima in each function. The produced
+functions are entitled GUILIN550 and GUILIN1050.
 \item \textbf{Hansen} function. $f(x)=\sum_{i=1}^{5}i\cos\left[(i-1)x_{1}+i\right]\sum_{j=1}^{5}j\cos\left[(j+1)x_{2}+j\right]$,
-$x\in[-10,10]^{2}$ . The global minimum of the function is -176.541793.
-\item \textbf{Hartman 3} function. The function is given by
+$x\in[-10,10]^{2}$.
+\item \textbf{Hartman 3} function.
 \[
 f(x)=-\sum_{i=1}^{4}c_{i}\exp\left(-\sum_{j=1}^{3}a_{ij}\left(x_{j}-p_{ij}\right)^{2}\right)
 \]
@@ -356,16 +356,16 @@ p=\left(\begin{array}{cccccc}
 0.4047 & 0.8828 & 0.8732 & 0.5743 & 0.1091 & 0.0381
 \end{array}\right)
 \]
-\item \textbf{Rastrigin} function. The function is given by 
+\item \textbf{Rastrigin} function.  
 \[
 f(x)=x_{1}^{2}+x_{2}^{2}-\cos(18x_{1})-\cos(18x_{2}),\quad x\in[-1,1]^{2}
 \]
 \item \textbf{\emph{Rosenbrock}}\emph{ function }\\
-This function is given by 
+
 \[
 f(x)=\sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2}+\left(x_{i}-1\right)^{2}\right),\quad-30\le x_{i}\le30.
 \]
-The global minimum is located at the $x^{*}=(0,0,...,0)$ with $f\left(x^{*}\right)=0$.
+
 In our experiments we used this function with $n=20$.
 \item \textbf{Shekel 7} function.
 \end{itemize}
@@ -443,29 +443,25 @@ with $x\in[0,10]^{4}$ and $a=\left(\begin{array}{cccc}
 0.6
 \end{array}\right)$. 
 \begin{itemize}
-\item \textbf{Sinusoidal} function. The function is given by 
+\item \textbf{Sinusoidal} function. 
 \[
 f(x)=-\left(2.5\prod_{i=1}^{n}\sin\left(x_{i}-z\right)+\prod_{i=1}^{n}\sin\left(5\left(x_{i}-z\right)\right)\right),\quad0\le x_{i}\le\pi.
-\]
-The global minimum is located at $x^{*}=(2.09435,2.09435,...,2.09435)$
-with $f\left(x^{*}\right)=-3.5$. In our experiments we used $n=4,8,16,32$
+\] In our experiments we used $n=4,8,16,32$
 and $z=\frac{\pi}{6}$ and the corresponding functions are denoted
 by the labels SINU4, SINU8, SINU16, SINU32.
 \item \textbf{Test2N} function. This function is given by the equation 
 \[
 f(x)=\frac{1}{2}\sum_{i=1}^{n}x_{i}^{4}-16x_{i}^{2}+5x_{i},\quad x_{i}\in[-5,5].
 \]
-The function has $2^{n}$ in the specified range and in our experiments
-we used $n=4,5,6,7$. The corresponding values of global minimum is
--156.664663 for $n=4$, -195.830829 for $n=5$, -234.996994 for $n=6$
-and -274.163160 for $n=7$.
+
+In the conducted experiments the $n$ has the values 4,5,6,7.
+
 \item \textbf{Test30N} function. This function is given by 
 \[
 f(x)=\frac{1}{10}\sin^{2}\left(3\pi x_{1}\right)\sum_{i=2}^{n-1}\left(\left(x_{i}-1\right)^{2}\left(1+\sin^{2}\left(3\pi x_{i+1}\right)\right)\right)+\left(x_{n}-1\right)^{2}\left(1+\sin^{2}\left(2\pi x_{n}\right)\right)
 \]
 with $x\in[-10,10]$. The function has $30^{n}$ local minima in the
-specified range and we used $n=3,4$ in our experiments. The value
-of global minimum for this function is 0.0
+specified range and we used $n=3,4$ in our experiments. 
 \end{itemize}
 
 \subsection{Results}
@@ -477,12 +473,13 @@ rejected during the\textbf{ New\_Point} step, i.e. points created
 that are outside the domain range of the function. All the experiments
 were conducted 30 times and different seed for the random number generator
 was used each time. The local search method that used in the experiments
-and denoted as localsearch(x), was a BFGS variant due to Powell\cite{powell}.
+and denoted as localsearch(x), was a BFGS variant due to Powell\cite{powell}. The experiments were conducted on a  i7-10700T CPU at 2.00GHz equipped with 16GB of RAM. The operating system used was Debian Linux and the all the code were compiled using ANSI C++ compiler.
+
 The experimental results are listed in Table \ref{tab:Experimenting-with-rejection}.
 The column FUNCTION stands for the name of the objective function,
-the column CRS-R represents the rejection rate\textbf{ }for the CRS
-method while the column NEWCRS-R represents the same measure for the
-proposed method. Similar, the column CRS-C represents the average
+the column CRS-R stands for the rejection rate\textbf{ }for the CRS
+method while the column NEWCRS-R displays  the same measure for the
+current method. Similar, the column CRS-C represents the average
 function calls for the CRS method and the column NEWCRS-C stands for
 the average function calls of the proposed method. Also a statistical
 comparison between the CRS and the proposed method is shown in Figure
@@ -494,6 +491,8 @@ here to create new point is more accurate than the traditional one.
 Also, the proposed method requires lower number of function calls
 than the CRS method as one can deduce from the relevant columns and
 the statistical comparison.
+
+Additionally, the execution time for every test function was measured and this information  is outlined in Table \ref{tab:Experimenting-with-time}. The column CRS-TIME stands for the average execution time of the original CRS method, the column NEWCRS-TIME represents the average execution time for the proposed method and the column DIFF is the calculated percentage difference between the previously mentioned columns. 
 
 \begin{table}
 \caption{Experimenting with rejection rates.\label{tab:Experimenting-with-rejection}}
@@ -581,8 +580,99 @@ TEST30N4 & 27.30\% & 7432 & 0.00\% & 8579\tabularnewline
 \end{tabular}
 \par\end{centering}
 \end{table}
+
+
+\begin{table}
+\caption{Time comparisons.\label{tab:Experimenting-with-time}}
+
+\begin{centering}
+\begin{tabular}{|c|c|c|c|}
+\hline 
+FUNCTION & CRS-TIME & NEWCRS-TIME & DIFF \tabularnewline
+\hline 
+\hline 
+BF1 & 0.168 & 0.154 & 8.33\% \tabularnewline
+\hline 
+BF2 & 0.180 & 0.154 & 14.44\% \tabularnewline
+\hline 
+BRANIN & 0.209 & 0.138 & 33.97\% \tabularnewline
+\hline 
+CAMEL & 0.165 & 0.141 & 14.55\% \tabularnewline
+\hline 
+EASOM & 0.165 & 0.151 & 8.48\% \tabularnewline
+\hline 
+EXP2 & 0.165 & 0.143 & 13.33\% \tabularnewline
+\hline 
+EXP4 & 0.228 & 0.152 & 33.33\% \tabularnewline
+\hline 
+EXP8 & 0.629 & 0.187 & 70.27\% \tabularnewline
+\hline 
+EXP16 & 3.142 & 0.299 & 90.48\% \tabularnewline
+\hline 
+EXP32 & 14.364 & 1.082 & 92.47\% \tabularnewline
+\hline 
+EXP64 & 60.861 & 3.932 & 93.54\%\tabularnewline
+\hline 
+EXP100 & 144.794 & 9.386 & 93.52\% \tabularnewline
+\hline 
+GKLS250 & 0.592 & 0.593 & -0.17\%  \tabularnewline
+\hline 
+GKLS350 & 0.658 & 0.599 & 8.97\%  \tabularnewline
+\hline 
+GOLDSTEIN & 0.191 & 0.163 & 14.66\% \tabularnewline
+\hline 
+GRIEWANK2 & 0.174 & 0.166 & 4.60\%\tabularnewline
+\hline 
+GUILIN550 & 0.475 & 0.529 & -11.37\% \tabularnewline
+\hline 
+GUILIN1050 & 1.524 & 0.453 & 70.28\% \tabularnewline
+\hline 
+HANSEN & 0.217 & 0.292 & -34.56\% \tabularnewline
+\hline 
+HARTMAN3 & 0.21 & 0.163 & 22.38\% \tabularnewline
+\hline 
+HARTMAN6 & 0.514 & 0.262 & 49.03\% \tabularnewline
+\hline 
+RASTRIGIN & 0.168 & 0.16 & 4.76\% \tabularnewline
+\hline 
+ROSENBROCK & 5.31 & 0.584 & 89.00\% \tabularnewline
+\hline 
+SHEKEL5 & 0.321 & 0.203 & 36.76\% \tabularnewline
+\hline 
+SHEKEL7 & 0.302 & 0.218 & 27.81\% \tabularnewline
+\hline 
+SHEKEL10 & 0.325 & 0.271 & 16.62\% \tabularnewline
+\hline 
+SINU4 & 0.283 & 0.206 & 27.21\% \tabularnewline
+\hline 
+SINU8 & 0.897 & 0.369 & 58.86\% \tabularnewline
+\hline 
+SINU16 & 4.775 & 1.448 & 69.68\% \tabularnewline
+\hline 
+SINU32 & 24.413 & 8.999 & 63.14\% \tabularnewline
+\hline 
+TEST2N4 & 0.389 & 0.19 & 51.16\% \tabularnewline
+\hline 
+TEST2N5 & 0.733 & 0.209 & 71.49\% \tabularnewline
+\hline 
+TEST2N6 & 1.714 & 0.256 & 85.06\% \tabularnewline
+\hline 
+TEST2N7 & 4.326 & 0.264 & 93.90\% \tabularnewline
+\hline 
+TEST30N3 & 0.222 & 0.203 & 8.56\% \tabularnewline
+\hline 
+TEST30N4 & 0.324 & 0.239 & 26.23\% \tabularnewline
+\hline 
+\textbf{TOTAL} & 274.127 & 32.958 & \textbf{87.98\%} \tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\end{table}
+
+
+
 \begin{figure}
-\caption{Statistical comparison for the function calls using box plots.\label{fig:Statistical-comparison-for}}
+\caption{Statistical comparison for the function calls using box plots.\\ \label{fig:Statistical-comparison-for}}
 
 \begin{centering}
 \includegraphics[scale=0.7]{values}
@@ -603,7 +693,10 @@ to every trial point created by the algorithm. Judging by the results,
 it seems that the proposed changes have two important effects. The
 first is that the success of the algorithm in creating valid test
 points is significantly improved. The second is the large reduction
-in the number of function calls required to find the global minimum. 
+in the number of function calls required to locate the global minimum. 
+
+ Future research may include the exploration of usage additional stopping rules and the parallelization of different aspects of the method in order to speed up the optimization procedure as well as to take advantage of multicore programming environments.
+\end{paracol}
 \begin{thebibliography}{10}
 \bibitem{GO1}T$\ddot{\mbox{o}}$rn A. and $\check{\mbox{Z}}$ilinskas
 A., Global Optimization Volume 350 of Lecture Notes in Computer Science,
@@ -661,7 +754,7 @@ Massachussets, 1989.
 of wind turbines using genetic algorithms, Renewable Energy \textbf{30},
 pp. 259-270, 2005.
 
-\bibitem{tabu1}A. Duarte, R. Martí, F. Glover et al., Hybrid scatter
+\bibitem{tabu1}A. Duarte, R. Marti, F. Glover et al., Hybrid scatter
 tabu search for unconstrained global optimization, Ann Oper Res \textbf{183},
 pp. 95--123m, 2011.
 
@@ -684,12 +777,12 @@ Search, Computer Journal \textbf{ 20}, pp. 367-370, 1977.
 inversion of seismic refraction data using the controlled random search,
 Geophysics \textbf{65},pp. 1622-1630, 200.
 
-\bibitem{crs_geophysics2}Cassiano Antonio Bortolozo, Jorge Luís Porsani,
-Fernando Acácio Monteiro dos Santos, Emerson Rodrigo Almeida, VES/TEM
+\bibitem{crs_geophysics2}Cassiano Antonio Bortolozo, Jorge Luis Porsani,
+Fernando Acacio Monteiro dos Santos, Emerson Rodrigo Almeida, VES/TEM
 1D joint inversion by using Controlled Random Search (CRS) algorithm,
 Journal of Applied Geophysics \textbf{112}, pp. 157-174, 2015.
 
-\bibitem{crs_optimalshape1}J. Haslinger, D. Jedelský, T. Kozubek
+\bibitem{crs_optimalshape1}J. Haslinger, D. Jedelsky, T. Kozubek
 et al, Genetic and Random Search Methods in Optimal Shape Design Problems,
 Journal of Global Optimization \textbf{16}, pp. 109--131, 2000.
 
