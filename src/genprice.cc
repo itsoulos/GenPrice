@@ -52,7 +52,7 @@ bool GenPrice::check()
 		oldBesty = fmin;
 		stopat = variance / 2.0;
 	}
-	//printf("GCRS. Iteration: %4d Fitness: %10.5lf Variance: %10.5lf Stopat: %10.5lf \n", miters, fmin, variance, stopat);
+	//printf(" %4d  %10.5lf  %10.5lf  %10.5lf \n", miters, fmin, variance, stopat);
 	if (variance <= stopat && miters >= 1000)
 	{
 
